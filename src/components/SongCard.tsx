@@ -57,7 +57,7 @@ export function SongCard({
           </div>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {song.isCover && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-warm-orange/20 text-warm-orange">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-hot-pink/20 text-hot-pink">
                 Cover
               </span>
             )}

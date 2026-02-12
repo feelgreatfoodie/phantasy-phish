@@ -2,7 +2,7 @@
 
 import { Draft, LeaderboardEntry } from "./types";
 
-const DRAFTS_KEY = "fantasy-phish-drafts";
+const DRAFTS_KEY = "phantasy-phish-drafts";
 
 export function getDrafts(): Draft[] {
   if (typeof window === "undefined") return [];

@@ -1,4 +1,4 @@
-# Fantasy Phish
+# Phantasy Phish
 
 A fantasy sports-style web app for Phish concert setlists. Draft songs you think will be played at upcoming shows, score points based on actual setlists, and compete with friends.
 

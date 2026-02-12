@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fantasy Phish",
+  title: "Phantasy Phish",
   description:
     "A fantasy sports-style web app for Phish concert setlists. Draft songs, score points, compete with friends.",
 };
@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <div className="min-h-screen donut-bg">
           <Navigation />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
             {children}
           </main>
         </div>

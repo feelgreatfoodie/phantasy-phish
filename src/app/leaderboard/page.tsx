@@ -27,7 +27,7 @@ export default function LeaderboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Leaderboard</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">Leaderboard</h1>
         <p className="text-text-muted mt-1">
           Rankings across all shows and drafts
         </p>
@@ -50,33 +50,33 @@ export default function LeaderboardPage() {
         <>
           {/* Top 3 podium */}
           {leaderboard.length >= 1 && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {leaderboard.slice(0, 3).map((entry, i) => (
                 <div
                   key={entry.playerName}
                   className={cn(
-                    "rounded-2xl border p-6 text-center",
+                    "rounded-2xl border p-4 sm:p-6 text-center transition-all hover:scale-[1.02]",
                     i === 0
-                      ? "bg-gradient-to-b from-electric-teal/20 to-surface border-electric-teal/30 sm:order-2"
+                      ? "bg-gradient-to-b from-electric-teal/15 via-deep-purple/10 to-surface border-electric-teal/30 shadow-lg shadow-electric-teal/10 sm:order-2"
                       : i === 1
-                      ? "bg-surface border-border sm:order-1"
-                      : "bg-surface border-border sm:order-3"
+                      ? "bg-gradient-to-b from-hot-pink/10 to-surface border-hot-pink/20 sm:order-1"
+                      : "bg-gradient-to-b from-deep-purple/10 to-surface border-deep-purple/20 sm:order-3"
                   )}
                 >
                   <div
                     className={cn(
                       "text-4xl font-black mb-2",
                       i === 0
-                        ? "text-electric-teal"
+                        ? "text-electric-teal neon-glow"
                         : i === 1
-                        ? "text-warm-orange"
+                        ? "text-hot-pink neon-glow-pink"
                         : "text-deep-purple-light"
                     )}
                   >
                     #{i + 1}
                   </div>
                   <h3 className="text-xl font-bold">{entry.playerName}</h3>
-                  <div className="text-3xl font-black text-electric-teal mt-2">
+                  <div className="text-2xl sm:text-3xl font-black text-electric-teal mt-2">
                     {entry.totalPoints}
                   </div>
                   <div className="text-xs text-text-muted">total points</div>
@@ -105,22 +105,22 @@ export default function LeaderboardPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="text-left p-4 text-text-muted text-sm font-medium">
+                    <th className="text-left p-2 sm:p-4 text-text-muted text-xs sm:text-sm font-medium">
                       Rank
                     </th>
-                    <th className="text-left p-4 text-text-muted text-sm font-medium">
+                    <th className="text-left p-2 sm:p-4 text-text-muted text-xs sm:text-sm font-medium">
                       Player
                     </th>
-                    <th className="text-right p-4 text-text-muted text-sm font-medium">
+                    <th className="text-right p-2 sm:p-4 text-text-muted text-xs sm:text-sm font-medium">
                       Total Points
                     </th>
-                    <th className="text-right p-4 text-text-muted text-sm font-medium hidden sm:table-cell">
+                    <th className="text-right p-2 sm:p-4 text-text-muted text-xs sm:text-sm font-medium hidden sm:table-cell">
                       Shows
                     </th>
-                    <th className="text-right p-4 text-text-muted text-sm font-medium hidden sm:table-cell">
+                    <th className="text-right p-2 sm:p-4 text-text-muted text-xs sm:text-sm font-medium hidden sm:table-cell">
                       Avg/Show
                     </th>
-                    <th className="text-right p-4 text-text-muted text-sm font-medium hidden sm:table-cell">
+                    <th className="text-right p-2 sm:p-4 text-text-muted text-xs sm:text-sm font-medium hidden sm:table-cell">
                       Best Show
                     </th>
                   </tr>
@@ -131,35 +131,35 @@ export default function LeaderboardPage() {
                       key={entry.playerName}
                       className="border-b border-border/50 hover:bg-surface-light transition-colors"
                     >
-                      <td className="p-4">
+                      <td className="p-2 sm:p-4">
                         <span
                           className={cn(
-                            "font-bold",
-                            i < 3 ? "text-warm-orange" : "text-text-muted"
+                            "font-bold text-sm",
+                            i < 3 ? "text-golden" : "text-text-muted"
                           )}
                         >
                           #{i + 1}
                         </span>
                       </td>
-                      <td className="p-4">
-                        <span className="font-medium">{entry.playerName}</span>
-                        <div className="text-xs text-text-muted mt-0.5">
+                      <td className="p-2 sm:p-4">
+                        <span className="font-medium text-sm">{entry.playerName}</span>
+                        <div className="text-[10px] sm:text-xs text-text-muted mt-0.5">
                           {entry.drafts.length} draft
                           {entry.drafts.length !== 1 ? "s" : ""}
                         </div>
                       </td>
-                      <td className="p-4 text-right">
-                        <span className="text-electric-teal font-bold text-lg">
+                      <td className="p-2 sm:p-4 text-right">
+                        <span className="text-electric-teal font-bold text-base sm:text-lg">
                           {entry.totalPoints}
                         </span>
                       </td>
-                      <td className="p-4 text-right hidden sm:table-cell">
+                      <td className="p-2 sm:p-4 text-right hidden sm:table-cell">
                         {entry.showsPlayed}
                       </td>
-                      <td className="p-4 text-right hidden sm:table-cell">
+                      <td className="p-2 sm:p-4 text-right hidden sm:table-cell">
                         {entry.avgPointsPerShow}
                       </td>
-                      <td className="p-4 text-right hidden sm:table-cell">
+                      <td className="p-2 sm:p-4 text-right hidden sm:table-cell">
                         {entry.bestShow}
                       </td>
                     </tr>
@@ -171,14 +171,14 @@ export default function LeaderboardPage() {
 
           {/* Per-show breakdown */}
           <div>
-            <h2 className="text-2xl font-bold mb-4">Show Breakdown</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">Show Breakdown</h2>
             <div className="space-y-3">
               {leaderboard.map((entry) => (
                 <div
                   key={entry.playerName}
-                  className="bg-surface rounded-xl border border-border p-4"
+                  className="bg-surface rounded-xl border border-border p-3 sm:p-4"
                 >
-                  <h3 className="font-bold mb-3">{entry.playerName}</h3>
+                  <h3 className="font-bold text-sm sm:text-base mb-3">{entry.playerName}</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                     {entry.drafts
                       .filter((d) => d.scored)
@@ -190,7 +190,7 @@ export default function LeaderboardPage() {
                           <Link
                             key={draft.id}
                             href={`/draft/${draft.id}`}
-                            className="flex items-center justify-between p-3 rounded-lg bg-surface-light hover:bg-surface-lighter transition-colors"
+                            className="flex items-center justify-between p-2 sm:p-3 rounded-lg bg-surface-light hover:bg-surface-lighter transition-colors"
                           >
                             <div className="text-sm">
                               <div className="font-medium">

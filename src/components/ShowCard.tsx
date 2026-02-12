@@ -14,7 +14,7 @@ export function ShowCard({ show, draftCount = 0 }: ShowCardProps) {
       href={`/shows/${show.id}`}
       className={cn(
         "block p-5 rounded-xl border border-border bg-surface-light",
-        "hover:border-deep-purple-light hover:shadow-lg hover:shadow-deep-purple/10 transition-all"
+        "hover:border-deep-purple hover:shadow-lg hover:shadow-deep-purple/20 transition-all hover:scale-[1.01]"
       )}
     >
       <div className="flex items-start justify-between">
@@ -33,7 +33,7 @@ export function ShowCard({ show, draftCount = 0 }: ShowCardProps) {
               "px-3 py-1 rounded-full text-xs font-semibold",
               show.isCompleted
                 ? "bg-success/20 text-success"
-                : "bg-warm-orange/20 text-warm-orange"
+                : "bg-golden/20 text-golden"
             )}
           >
             {show.isCompleted ? "Completed" : "Upcoming"}

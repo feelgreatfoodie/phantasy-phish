@@ -4,41 +4,37 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/", label: "Home" },
   { href: "/draft", label: "Draft" },
   { href: "/shows", label: "Shows" },
   { href: "/songs", label: "Songs" },
-  { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/leaderboard", label: "Leaders" },
 ];
 
 export function Navigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-surface border-b border-border sticky top-0 z-50">
+    <nav className="bg-surface/80 backdrop-blur-xl sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-full bg-electric-teal flex items-center justify-center text-background font-bold text-lg">
-              FP
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-hot-pink via-deep-purple to-electric-teal flex items-center justify-center text-background font-black text-sm sm:text-lg shadow-lg shadow-deep-purple/30">
+              PP
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-electric-teal to-warm-orange bg-clip-text text-transparent">
-              Fantasy Phish
+            <span className="text-base sm:text-xl font-black psychedelic-text">
+              Phantasy Phish
             </span>
           </Link>
           <div className="hidden sm:flex items-center gap-1">
             {links.map((link) => {
-              const isActive =
-                link.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(link.href);
+              const isActive = pathname.startsWith(link.href);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-deep-purple text-electric-teal"
+                      ? "bg-deep-purple/40 text-electric-teal neon-glow"
                       : "text-text-muted hover:text-foreground hover:bg-surface-light"
                   }`}
                 >
@@ -53,13 +49,14 @@ export function Navigation() {
           </div>
         </div>
       </div>
+      <div className="rainbow-divider" />
     </nav>
   );
 }
 
 function MobileMenu({ pathname }: { pathname: string }) {
   return (
-    <div className="flex gap-1 overflow-x-auto pb-1">
+    <div className="flex gap-0.5 overflow-x-auto pb-1">
       {links.map((link) => {
         const isActive =
           link.href === "/"
@@ -69,9 +66,9 @@ function MobileMenu({ pathname }: { pathname: string }) {
           <Link
             key={link.href}
             href={link.href}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+            className={`px-2 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
               isActive
-                ? "bg-deep-purple text-electric-teal"
+                ? "bg-deep-purple/40 text-electric-teal"
                 : "text-text-muted hover:text-foreground"
             }`}
           >

@@ -131,17 +131,17 @@ export default function DraftPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Draft Your Setlist</h1>
-          <p className="text-text-muted mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold">Draft Your Setlist</h1>
+          <p className="text-text-muted text-sm sm:text-base mt-1">
             Pick {DRAFT_SIZE} songs you think will be played
           </p>
         </div>
       </div>
 
       {/* Player name and show selection */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div>
-          <label className="block text-sm font-medium text-text-muted mb-1">
+          <label className="block text-xs sm:text-sm font-medium text-text-muted mb-1">
             Your Name
           </label>
           <input
@@ -149,17 +149,17 @@ export default function DraftPage() {
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
             placeholder="Enter your name"
-            className="w-full px-4 py-2.5 rounded-xl bg-surface-light border border-border text-foreground placeholder:text-text-muted focus:outline-none focus:border-electric-teal"
+            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm placeholder:text-text-muted focus:outline-none focus:border-electric-teal"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-text-muted mb-1">
+          <label className="block text-xs sm:text-sm font-medium text-text-muted mb-1">
             Show
           </label>
           <select
             value={selectedShow}
             onChange={(e) => setSelectedShow(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-surface-light border border-border text-foreground focus:outline-none focus:border-electric-teal"
+            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm focus:outline-none focus:border-electric-teal"
           >
             <option value="">Select a show</option>
             {allShows.map((show) => (
@@ -172,9 +172,9 @@ export default function DraftPage() {
       </div>
 
       {/* Selected songs panel */}
-      <div className="bg-surface rounded-xl border border-border p-4">
+      <div className="bg-surface rounded-xl border border-border p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-lg">
+          <h2 className="font-bold text-base sm:text-lg">
             Your Draft{" "}
             <span
               className={cn(
@@ -201,12 +201,12 @@ export default function DraftPage() {
             Select songs from the catalog below to build your draft
           </p>
         ) : (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {selectedSongObjects.map((song) => (
               <button
                 key={song.id}
                 onClick={() => toggleSong(song.id)}
-                className="group flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-electric-teal/10 border border-electric-teal/30 text-electric-teal text-sm hover:bg-danger/10 hover:border-danger/30 hover:text-danger transition-colors"
+                className="group flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-electric-teal/10 border border-electric-teal/30 text-electric-teal text-xs sm:text-sm hover:bg-danger/10 hover:border-danger/30 hover:text-danger transition-colors"
               >
                 <span>{song.name}</span>
                 <svg
@@ -255,20 +255,20 @@ export default function DraftPage() {
                 <Link
                   key={draft.id}
                   href={`/draft/${draft.id}`}
-                  className="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-surface-lighter transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-lg bg-surface hover:bg-surface-lighter transition-colors gap-1 sm:gap-0"
                 >
-                  <div>
-                    <span className="font-medium">{draft.playerName}</span>
-                    <span className="text-text-muted text-sm ml-2">
+                  <div className="min-w-0">
+                    <span className="font-medium text-sm">{draft.playerName}</span>
+                    <span className="text-text-muted text-xs sm:text-sm ml-2">
                       {show ? `${formatDate(show.date)} - ${show.venue}` : draft.showId}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-text-muted">
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-xs sm:text-sm text-text-muted">
                       {draft.songIds.length} songs
                     </span>
                     {draft.scored && (
-                      <span className="text-electric-teal font-bold">
+                      <span className="text-electric-teal font-bold text-sm">
                         {draft.totalScore} pts
                       </span>
                     )}
@@ -292,26 +292,26 @@ export default function DraftPage() {
                 setLetterFilter(null);
               }}
               placeholder="Search songs..."
-              className="w-full px-4 py-2.5 rounded-xl bg-surface-light border border-border text-foreground placeholder:text-text-muted focus:outline-none focus:border-electric-teal"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm placeholder:text-text-muted focus:outline-none focus:border-electric-teal"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortOption)}
-              className="px-3 py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm focus:outline-none focus:border-electric-teal"
+              className="flex-1 sm:flex-initial px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-xs sm:text-sm focus:outline-none focus:border-electric-teal"
             >
-              <option value="name">Sort: A-Z</option>
-              <option value="timesPlayed">Sort: Most Played</option>
-              <option value="avgGap">Sort: Biggest Gap</option>
-              <option value="debut">Sort: Debut Year</option>
+              <option value="name">A-Z</option>
+              <option value="timesPlayed">Most Played</option>
+              <option value="avgGap">Biggest Gap</option>
+              <option value="debut">Debut Year</option>
             </select>
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value as FilterOption)}
-              className="px-3 py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm focus:outline-none focus:border-electric-teal"
+              className="flex-1 sm:flex-initial px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-xs sm:text-sm focus:outline-none focus:border-electric-teal"
             >
-              <option value="all">All Songs</option>
+              <option value="all">All</option>
               <option value="originals">Originals</option>
               <option value="covers">Covers</option>
               <option value="bustouts">Bust-outs</option>
@@ -320,11 +320,11 @@ export default function DraftPage() {
         </div>
 
         {/* Letter filter */}
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-0.5 sm:gap-1">
           <button
             onClick={() => setLetterFilter(null)}
             className={cn(
-              "w-8 h-8 rounded-lg text-xs font-bold flex items-center justify-center transition-colors",
+              "w-7 h-7 sm:w-8 sm:h-8 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold flex items-center justify-center transition-colors",
               letterFilter === null
                 ? "bg-electric-teal text-background"
                 : "bg-surface-light text-text-muted hover:text-foreground"
@@ -339,7 +339,7 @@ export default function DraftPage() {
                 setLetterFilter(letterFilter === letter ? null : letter)
               }
               className={cn(
-                "w-8 h-8 rounded-lg text-xs font-bold flex items-center justify-center transition-colors",
+                "w-7 h-7 sm:w-8 sm:h-8 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold flex items-center justify-center transition-colors",
                 letterFilter === letter
                   ? "bg-electric-teal text-background"
                   : "bg-surface-light text-text-muted hover:text-foreground"
@@ -352,7 +352,7 @@ export default function DraftPage() {
       </div>
 
       {/* Song catalog grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
         {filteredSongs.map((song) => (
           <SongCard
             key={song.id}

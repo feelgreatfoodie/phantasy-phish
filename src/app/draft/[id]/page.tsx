@@ -80,7 +80,7 @@ export default function DraftDetailPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">{draft.playerName}&apos;s Draft</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">{draft.playerName}&apos;s Draft</h1>
           {show && (
             <p className="text-text-muted mt-1">
               {show.venue} - {formatDate(show.date)}
@@ -105,24 +105,25 @@ export default function DraftDetailPage() {
 
       {/* Score summary */}
       {draft.scored && (
-        <div className="bg-surface rounded-2xl border border-border p-6 text-center">
-          <div className="text-5xl font-black text-electric-teal score-reveal">
+        <div className="bg-gradient-to-b from-deep-purple/15 to-surface rounded-2xl border border-deep-purple/30 p-4 sm:p-6 text-center">
+          <div className="text-4xl sm:text-5xl font-black text-electric-teal neon-glow score-reveal">
             {draft.totalScore}
           </div>
           <div className="text-text-muted mt-1">Total Points</div>
-          <div className="flex justify-center gap-6 mt-4">
+          <div className="rainbow-divider my-4" />
+          <div className="flex justify-center gap-4 sm:gap-6">
             <div>
-              <div className="text-2xl font-bold text-success">{playedCount}</div>
+              <div className="text-xl sm:text-2xl font-bold text-acid-green">{playedCount}</div>
               <div className="text-xs text-text-muted">Songs Hit</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-danger">
+              <div className="text-xl sm:text-2xl font-bold text-hot-pink">
                 {draft.songIds.length - playedCount}
               </div>
               <div className="text-xs text-text-muted">Missed</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-warm-orange">
+              <div className="text-xl sm:text-2xl font-bold text-golden">
                 {Math.round(
                   (playedCount / draft.songIds.length) * 100
                 )}
@@ -135,8 +136,8 @@ export default function DraftDetailPage() {
       )}
 
       {!draft.scored && show && !show.isCompleted && (
-        <div className="bg-surface rounded-2xl border border-border p-6 text-center">
-          <div className="text-xl font-bold text-warm-orange">
+        <div className="bg-gradient-to-b from-hot-pink/10 to-surface rounded-2xl border border-hot-pink/20 p-6 text-center">
+          <div className="text-xl font-bold text-hot-pink breathe">
             Awaiting Results
           </div>
           <p className="text-text-muted mt-2">
@@ -150,7 +151,7 @@ export default function DraftDetailPage() {
         <h2 className="text-xl font-bold mb-4">
           {draft.scored ? "Results" : "Selected Songs"}
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
           {draft.songIds.map((songId) => {
             const song = getSongById(songId);
             if (!song) return null;
@@ -222,7 +223,7 @@ function SetlistSection({
 }) {
   return (
     <div className="bg-surface rounded-xl border border-border p-4">
-      <h3 className="font-bold text-warm-orange mb-3">{title}</h3>
+      <h3 className="font-bold text-golden mb-3">{title}</h3>
       <div className="space-y-1.5">
         {entries.map((entry, i) => {
           const song = getSongById(entry.songId);
@@ -246,7 +247,7 @@ function SetlistSection({
                   {song?.name || entry.songId}
                 </span>
                 {entry.isOpener && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-warm-orange/20 text-warm-orange">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-hot-pink/20 text-hot-pink">
                     Opener
                   </span>
                 )}

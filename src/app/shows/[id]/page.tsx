@@ -59,10 +59,10 @@ export default function ShowDetailPage() {
   return (
     <div className="space-y-8">
       {/* Show Header */}
-      <div className="bg-surface rounded-2xl border border-border p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="bg-surface rounded-2xl border border-border p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="text-3xl font-bold">{show.venue}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">{show.venue}</h1>
             <p className="text-text-muted">
               {show.city}, {show.state}
             </p>
@@ -70,20 +70,20 @@ export default function ShowDetailPage() {
               {formatDate(show.date)}
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3">
             <span
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-semibold",
+                "px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold",
                 show.isCompleted
                   ? "bg-success/20 text-success"
-                  : "bg-warm-orange/20 text-warm-orange"
+                  : "bg-hot-pink/20 text-hot-pink"
               )}
             >
               {show.isCompleted ? "Completed" : "Upcoming"}
             </span>
             <Link
               href="/draft"
-              className="px-4 py-2 rounded-xl bg-electric-teal text-background font-bold text-sm hover:bg-electric-teal-dark transition-colors"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-electric-teal text-background font-bold text-xs sm:text-sm hover:bg-electric-teal-dark transition-colors"
             >
               Draft for this show
             </Link>
@@ -123,10 +123,10 @@ export default function ShowDetailPage() {
                 <Link
                   key={draft.id}
                   href={`/draft/${draft.id}`}
-                  className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border hover:border-deep-purple-light transition-colors"
+                  className="flex items-center justify-between p-3 sm:p-4 rounded-xl bg-surface border border-border hover:border-deep-purple-light transition-colors"
                 >
-                  <div className="flex items-center gap-4">
-                    <span className="text-warm-orange font-bold text-lg w-8">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <span className="text-golden font-bold text-base sm:text-lg w-6 sm:w-8">
                       #{i + 1}
                     </span>
                     <div>
@@ -160,7 +160,7 @@ export default function ShowDetailPage() {
 
 function SetlistDisplay({ show }: { show: Show }) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
       <SetSection title="Set 1" entries={show.set1} />
       <SetSection title="Set 2" entries={show.set2} />
       <SetSection title="Encore" entries={show.encore} />
@@ -177,7 +177,7 @@ function SetSection({
 }) {
   return (
     <div className="bg-surface rounded-xl border border-border p-4">
-      <h3 className="font-bold text-warm-orange mb-3">{title}</h3>
+      <h3 className="font-bold text-golden mb-3">{title}</h3>
       <div className="space-y-1.5">
         {entries.map((entry, i) => {
           const song = getSongById(entry.songId);
@@ -192,7 +192,7 @@ function SetSection({
               </span>
               <div className="flex gap-1">
                 {entry.isOpener && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-warm-orange/20 text-warm-orange">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-hot-pink/20 text-hot-pink">
                     Opener
                   </span>
                 )}
@@ -202,7 +202,7 @@ function SetSection({
                   </span>
                 )}
                 {song?.isCover && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-warm-orange/20 text-warm-orange">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-hot-pink/20 text-hot-pink">
                     Cover
                   </span>
                 )}

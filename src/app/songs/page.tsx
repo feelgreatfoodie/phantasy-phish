@@ -68,27 +68,27 @@ export default function SongsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-surface rounded-xl p-3 border border-border text-center">
-          <div className="text-2xl font-bold text-electric-teal">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+        <div className="bg-surface rounded-xl p-3 border border-electric-teal/20 text-center">
+          <div className="text-2xl font-bold text-electric-teal neon-glow">
             {songs.length}
           </div>
           <div className="text-xs text-text-muted">Total Songs</div>
         </div>
-        <div className="bg-surface rounded-xl p-3 border border-border text-center">
-          <div className="text-2xl font-bold text-warm-orange">
+        <div className="bg-surface rounded-xl p-3 border border-hot-pink/20 text-center">
+          <div className="text-2xl font-bold text-hot-pink neon-glow-pink">
             {coverCount}
           </div>
           <div className="text-xs text-text-muted">Covers</div>
         </div>
-        <div className="bg-surface rounded-xl p-3 border border-border text-center">
+        <div className="bg-surface rounded-xl p-3 border border-deep-purple/30 text-center">
           <div className="text-2xl font-bold text-deep-purple-light">
             {bustOutCount}
           </div>
           <div className="text-xs text-text-muted">Bust-outs</div>
         </div>
-        <div className="bg-surface rounded-xl p-3 border border-border text-center">
-          <div className="text-2xl font-bold text-electric-teal">
+        <div className="bg-surface rounded-xl p-3 border border-golden/20 text-center">
+          <div className="text-2xl font-bold text-golden">
             {avgTimesPlayed}
           </div>
           <div className="text-xs text-text-muted">Avg Times Played</div>
@@ -96,36 +96,38 @@ export default function SongsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search songs or artists..."
-          className="flex-1 px-4 py-2.5 rounded-xl bg-surface-light border border-border text-foreground placeholder:text-text-muted focus:outline-none focus:border-electric-teal"
+          className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm placeholder:text-text-muted focus:outline-none focus:border-electric-teal"
         />
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value as SortOption)}
-          className="px-3 py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm focus:outline-none focus:border-electric-teal"
-        >
-          <option value="name">Sort: A-Z</option>
-          <option value="timesPlayed">Sort: Most Played</option>
-          <option value="avgGap">Sort: Biggest Gap</option>
-          <option value="debut">Sort: Debut Year</option>
-          <option value="lastPlayed">Sort: Recently Played</option>
-        </select>
-        <select
-          value={showCovers}
-          onChange={(e) =>
-            setShowCovers(e.target.value as "all" | "covers" | "originals")
-          }
-          className="px-3 py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm focus:outline-none focus:border-electric-teal"
-        >
-          <option value="all">All Songs</option>
-          <option value="originals">Originals Only</option>
-          <option value="covers">Covers Only</option>
-        </select>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortOption)}
+            className="flex-1 sm:flex-initial px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-xs sm:text-sm focus:outline-none focus:border-electric-teal"
+          >
+            <option value="name">A-Z</option>
+            <option value="timesPlayed">Most Played</option>
+            <option value="avgGap">Biggest Gap</option>
+            <option value="debut">Debut Year</option>
+            <option value="lastPlayed">Recently Played</option>
+          </select>
+          <select
+            value={showCovers}
+            onChange={(e) =>
+              setShowCovers(e.target.value as "all" | "covers" | "originals")
+            }
+            className="flex-1 sm:flex-initial px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-xs sm:text-sm focus:outline-none focus:border-electric-teal"
+          >
+            <option value="all">All</option>
+            <option value="originals">Originals</option>
+            <option value="covers">Covers</option>
+          </select>
+        </div>
       </div>
 
       {/* Songs table */}
@@ -134,22 +136,22 @@ export default function SongsPage() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border">
-                <th className="text-left p-3 text-text-muted text-sm font-medium">
+                <th className="text-left p-2 sm:p-3 text-text-muted text-xs sm:text-sm font-medium">
                   Song
                 </th>
-                <th className="text-center p-3 text-text-muted text-sm font-medium hidden sm:table-cell">
+                <th className="text-center p-2 sm:p-3 text-text-muted text-xs sm:text-sm font-medium hidden sm:table-cell">
                   Debut
                 </th>
-                <th className="text-center p-3 text-text-muted text-sm font-medium">
+                <th className="text-center p-2 sm:p-3 text-text-muted text-xs sm:text-sm font-medium">
                   Played
                 </th>
-                <th className="text-center p-3 text-text-muted text-sm font-medium">
+                <th className="text-center p-2 sm:p-3 text-text-muted text-xs sm:text-sm font-medium">
                   Gap
                 </th>
-                <th className="text-center p-3 text-text-muted text-sm font-medium hidden sm:table-cell">
+                <th className="text-center p-2 sm:p-3 text-text-muted text-xs sm:text-sm font-medium hidden sm:table-cell">
                   Last Played
                 </th>
-                <th className="text-center p-3 text-text-muted text-sm font-medium">
+                <th className="text-center p-2 sm:p-3 text-text-muted text-xs sm:text-sm font-medium">
                   Tags
                 </th>
               </tr>
@@ -177,35 +179,35 @@ function SongRow({ song }: { song: Song }) {
 
   return (
     <tr className="border-b border-border/50 hover:bg-surface-light transition-colors">
-      <td className="p-3">
-        <div className="font-medium text-sm">{song.name}</div>
+      <td className="p-2 sm:p-3">
+        <div className="font-medium text-xs sm:text-sm">{song.name}</div>
         {song.isCover && song.originalArtist && (
-          <div className="text-xs text-text-muted">by {song.originalArtist}</div>
+          <div className="text-[10px] sm:text-xs text-text-muted">by {song.originalArtist}</div>
         )}
       </td>
-      <td className="p-3 text-center text-sm text-text-muted hidden sm:table-cell">
+      <td className="p-2 sm:p-3 text-center text-xs sm:text-sm text-text-muted hidden sm:table-cell">
         {song.debut}
       </td>
-      <td className="p-3 text-center">
-        <span className="text-sm font-medium">{song.timesPlayed}</span>
+      <td className="p-2 sm:p-3 text-center">
+        <span className="text-xs sm:text-sm font-medium">{song.timesPlayed}</span>
       </td>
-      <td className="p-3 text-center">
+      <td className="p-2 sm:p-3 text-center">
         <span
           className={cn(
-            "text-sm font-medium",
-            isBustOut ? "text-warm-orange" : "text-text-muted"
+            "text-xs sm:text-sm font-medium",
+            isBustOut ? "text-hot-pink" : "text-text-muted"
           )}
         >
           {song.avgGap}
         </span>
       </td>
-      <td className="p-3 text-center text-sm text-text-muted hidden sm:table-cell">
+      <td className="p-2 sm:p-3 text-center text-xs sm:text-sm text-text-muted hidden sm:table-cell">
         {song.lastPlayed}
       </td>
-      <td className="p-3 text-center">
+      <td className="p-2 sm:p-3 text-center">
         <div className="flex flex-wrap gap-1 justify-center">
           {song.isCover && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-warm-orange/20 text-warm-orange">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-hot-pink/20 text-hot-pink">
               Cover
             </span>
           )}

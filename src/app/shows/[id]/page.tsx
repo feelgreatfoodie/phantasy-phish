@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { getShowById } from "@/data/shows";
 import { getSongById } from "@/data/songs";
-import { getDraftsByShow, saveDraft } from "@/lib/storage";
+import { getDraftsByShow, updateDraft } from "@/lib/storage";
 import { scoreDraft } from "@/lib/scoring";
 import { Draft } from "@/lib/types";
 import { Show } from "@/data/shows";
@@ -20,22 +20,31 @@ export default function ShowDetailPage() {
   const show = getShowById(showId);
 
   useEffect(() => {
-    setMounted(true);
-    if (show) {
-      let showDrafts = getDraftsByShow(showId);
-      // Auto-score any unscored drafts if show is completed
-      if (show.isCompleted) {
-        showDrafts = showDrafts.map((draft) => {
-          if (!draft.scored) {
-            const scored = scoreDraft(draft, show);
-            saveDraft(scored);
-            return scored;
-          }
-          return draft;
-        });
+    async function load() {
+      if (show) {
+        let showDrafts = await getDraftsByShow(showId);
+        // Auto-score any unscored drafts if show is completed
+        if (show.isCompleted) {
+          showDrafts = await Promise.all(
+            showDrafts.map(async (draft) => {
+              if (!draft.scored) {
+                const scored = scoreDraft(draft, show);
+                await updateDraft(draft.id, {
+                  scored: scored.scored,
+                  totalScore: scored.totalScore,
+                  songScores: scored.songScores,
+                });
+                return scored;
+              }
+              return draft;
+            })
+          );
+        }
+        setDrafts(showDrafts);
       }
-      setDrafts(showDrafts);
+      setMounted(true);
     }
+    load();
   }, [showId, show]);
 
   if (!show) {
@@ -130,7 +139,7 @@ export default function ShowDetailPage() {
                       #{i + 1}
                     </span>
                     <div>
-                      <span className="font-bold">{draft.playerName}</span>
+                      <span className="font-bold">{draft.displayName}</span>
                       <span className="text-text-muted text-sm ml-2">
                         {draft.songIds.length} songs
                       </span>

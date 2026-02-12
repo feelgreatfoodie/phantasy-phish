@@ -3,9 +3,11 @@
 import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { songs, Song } from "@/data/songs";
-import { shows, getUpcomingShows, getCompletedShows } from "@/data/shows";
+import { getUpcomingShows, getCompletedShows } from "@/data/shows";
+import { shows } from "@/data/shows";
 import { SongCard } from "@/components/SongCard";
-import { saveDraft, generateDraftId, getDrafts } from "@/lib/storage";
+import { createDraft, getDrafts } from "@/lib/storage";
+import { useAuth } from "@/components/AuthProvider";
 import { Draft } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/utils";
@@ -18,19 +20,21 @@ type FilterOption = "all" | "originals" | "covers" | "bustouts";
 
 export default function DraftPage() {
   const router = useRouter();
+  const { user, profile } = useAuth();
   const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
   const [search, setSearch] = useState("");
   const [letterFilter, setLetterFilter] = useState<string | null>(null);
   const [sort, setSort] = useState<SortOption>("name");
   const [filter, setFilter] = useState<FilterOption>("all");
-  const [playerName, setPlayerName] = useState("");
   const [selectedShow, setSelectedShow] = useState("");
   const [showSaved, setShowSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [existingDrafts, setExistingDrafts] = useState<Draft[]>([]);
 
   useEffect(() => {
-    setExistingDrafts(getDrafts());
-  }, []);
+    if (!user) return;
+    getDrafts(user.id).then(setExistingDrafts);
+  }, [user]);
 
   const allShows = [...getUpcomingShows(), ...getCompletedShows()];
 
@@ -96,26 +100,21 @@ export default function DraftPage() {
     });
   };
 
-  const handleSaveDraft = () => {
-    if (!playerName.trim() || !selectedShow || selectedSongs.length === 0)
-      return;
-
-    const draft: Draft = {
-      id: generateDraftId(),
-      playerName: playerName.trim(),
+  const handleSaveDraft = async () => {
+    if (!user || !selectedShow || selectedSongs.length === 0) return;
+    setSaving(true);
+    const draft = await createDraft({
+      userId: user.id,
       showId: selectedShow,
       songIds: selectedSongs,
-      createdAt: new Date().toISOString(),
-      scored: false,
-      totalScore: 0,
-      songScores: [],
-    };
-
-    saveDraft(draft);
-    setShowSaved(true);
-    setTimeout(() => {
-      router.push(`/draft/${draft.id}`);
-    }, 1000);
+    });
+    setSaving(false);
+    if (draft) {
+      setShowSaved(true);
+      setTimeout(() => {
+        router.push(`/draft/${draft.id}`);
+      }, 1000);
+    }
   };
 
   const letters = useMemo(() => {
@@ -136,39 +135,30 @@ export default function DraftPage() {
             Pick {DRAFT_SIZE} songs you think will be played
           </p>
         </div>
+        {user && profile && (
+          <div className="text-sm text-text-muted">
+            Drafting as <span className="text-foreground font-medium">{profile.display_name}</span>
+          </div>
+        )}
       </div>
 
-      {/* Player name and show selection */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-        <div>
-          <label className="block text-xs sm:text-sm font-medium text-text-muted mb-1">
-            Your Name
-          </label>
-          <input
-            type="text"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            placeholder="Enter your name"
-            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm placeholder:text-text-muted focus:outline-none focus:border-ocean-blue"
-          />
-        </div>
-        <div>
-          <label className="block text-xs sm:text-sm font-medium text-text-muted mb-1">
-            Show
-          </label>
-          <select
-            value={selectedShow}
-            onChange={(e) => setSelectedShow(e.target.value)}
-            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm focus:outline-none focus:border-ocean-blue"
-          >
-            <option value="">Select a show</option>
-            {allShows.map((show) => (
-              <option key={show.id} value={show.id}>
-                {formatDate(show.date)} - {show.venue}, {show.city}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Show selection */}
+      <div>
+        <label className="block text-xs sm:text-sm font-medium text-text-muted mb-1">
+          Show
+        </label>
+        <select
+          value={selectedShow}
+          onChange={(e) => setSelectedShow(e.target.value)}
+          className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm focus:outline-none focus:border-ocean-blue"
+        >
+          <option value="">Select a show</option>
+          {allShows.map((show) => (
+            <option key={show.id} value={show.id}>
+              {formatDate(show.date)} - {show.venue}, {show.city}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Selected songs panel */}
@@ -226,11 +216,11 @@ export default function DraftPage() {
             ))}
           </div>
         )}
-        {selectedSongs.length > 0 && playerName.trim() && selectedShow && (
+        {selectedSongs.length > 0 && user && selectedShow && (
           <div className="mt-4 pt-4 border-t border-border">
             <button
               onClick={handleSaveDraft}
-              disabled={showSaved}
+              disabled={showSaved || saving}
               className={cn(
                 "w-full py-3 rounded-xl font-bold text-lg transition-colors",
                 showSaved
@@ -238,7 +228,7 @@ export default function DraftPage() {
                   : "bg-ocean-blue text-background hover:bg-ocean-blue-dark"
               )}
             >
-              {showSaved ? "Draft Saved!" : `Save Draft (${selectedSongs.length} songs)`}
+              {showSaved ? "Draft Saved!" : saving ? "Saving..." : `Save Draft (${selectedSongs.length} songs)`}
             </button>
           </div>
         )}
@@ -258,8 +248,7 @@ export default function DraftPage() {
                   className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-lg bg-surface hover:bg-surface-lighter transition-colors gap-1 sm:gap-0"
                 >
                   <div className="min-w-0">
-                    <span className="font-medium text-sm">{draft.playerName}</span>
-                    <span className="text-text-muted text-xs sm:text-sm ml-2">
+                    <span className="text-text-muted text-xs sm:text-sm">
                       {show ? `${formatDate(show.date)} - ${show.venue}` : draft.showId}
                     </span>
                   </div>

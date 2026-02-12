@@ -2,18 +2,24 @@
 
 ## Overview
 
-Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs per show, get scored against actual setlists, and compete on a leaderboard.
+Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs per show, get scored against actual setlists, and compete on leaderboards (global and per-league).
 
 **Live:** https://phantasy-phish.vercel.app
 **Repo:** https://github.com/feelgreatfoodie/phantasy-phish
 
-## Current State: MVP Prototype (v0.1.0)
+## Current State
 
-- All features functional: draft, scoring, leaderboard, song catalog, show detail
-- Psychedelic theme with animated gradients, neon glows, frosted glass nav
-- Mobile-responsive down to iPhone 7 (375px)
-- Data: localStorage for drafts, static JSON for songs/shows
+- Auth: Supabase Auth with Google OAuth + email magic links
+- Data: Supabase Postgres for drafts, leaderboard, leagues; static TypeScript for songs/shows
+- Theme: Ocean color scheme (deep sea blues, coral, sandy gold)
 - Deployed on Vercel with GitHub auto-deploy
+
+### Implementation Progress
+
+- [x] Phase 1: Auth Foundation (Supabase client/server, middleware, AuthProvider, login page)
+- [x] Phase 2: Draft Migration (localStorage → Supabase Postgres, all pages updated)
+- [ ] Phase 3: League System (types + lib done, UI pages not yet built)
+- [ ] Phase 4: Profile page + polish
 
 ## Commit Conventions
 
@@ -25,89 +31,47 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 
 - Next.js 16 (App Router) / React 19 / TypeScript
 - Tailwind CSS v4 (`@theme inline` for CSS variables)
-- localStorage for persistence (no database)
+- Supabase (Auth + Postgres with RLS)
 - Vercel for hosting
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `src/app/globals.css` | Full theme: colors, animations, psychedelic effects |
+| `src/app/globals.css` | Ocean theme: colors, animations, wave effects |
 | `src/data/songs.ts` | Song catalog (100+ songs with stats) |
 | `src/data/shows.ts` | Show data with setlists |
 | `src/lib/scoring.ts` | Scoring engine |
-| `src/lib/storage.ts` | localStorage CRUD (key: `phantasy-phish-drafts`) |
-| `src/lib/types.ts` | TypeScript interfaces (Draft, SongScore, LeaderboardEntry) |
+| `src/lib/storage.ts` | Supabase CRUD for drafts + leaderboard |
+| `src/lib/leagues.ts` | Supabase CRUD for leagues |
+| `src/lib/types.ts` | TypeScript interfaces (Draft, SongScore, LeaderboardEntry, League, LeagueMember) |
+| `src/lib/supabase/client.ts` | Browser Supabase client (`createBrowserClient`) |
+| `src/lib/supabase/server.ts` | Server Supabase client (`createServerClient`) |
+| `src/lib/supabase/middleware.ts` | Session refresh + protected route redirects |
+| `src/components/AuthProvider.tsx` | Auth context: user, profile, loading, signOut |
+| `src/middleware.ts` | Next.js middleware entry point |
+| `supabase/migrations/001_initial_schema.sql` | Full DB schema |
 
----
+## Database Schema
 
-## Review Roadmap (Next Session)
+- **profiles** — auto-created via trigger on auth.users insert
+- **drafts** — user_id, show_id, song_ids[], scored, total_score, song_scores (JSONB), share_code, league_id
+- **leagues** — name, description, invite_code, created_by
+- **league_members** — league_id, user_id, role (owner/member)
 
-When we return to this project, run the following reviews before building new features.
+All tables have RLS: publicly readable, writes restricted to authenticated owner.
 
-### 1. Engineering Review
+## Auth Flow
 
-- [ ] Audit component structure — extract repeated patterns into shared components
-- [ ] Review state management — identify unnecessary re-renders, consider memoization
-- [ ] Audit `useEffect` dependencies — check for missing deps or stale closures
-- [ ] Review error boundaries — no error handling exists currently
-- [ ] Audit TypeScript strictness — check for `as` casts, `any` types, missing types
-- [ ] Review data flow — songs/shows are imported synchronously at module level
-- [ ] Check accessibility (a11y) — ARIA labels, keyboard navigation, color contrast
-- [ ] Verify SEO metadata — page titles, descriptions, Open Graph tags
+1. User clicks Google or enters email on `/login`
+2. Supabase handles OAuth/magic link redirect
+3. `/auth/callback` exchanges code for session
+4. `AuthProvider` fetches profile from `profiles` table
+5. Middleware protects `/draft` and `/leagues` routes (redirects to `/login`)
 
-### 2. Security Review
+## Environment Variables
 
-- [ ] Audit localStorage usage — no validation on read, potential XSS via crafted share URLs
-- [ ] Review `encodeDraftForShare` / share URL parsing — injection risk
-- [ ] Check for exposed secrets in `.env.example` or committed files
-- [ ] Review CSP headers — none configured currently
-- [ ] Audit `dangerouslySetInnerHTML` usage (should be none, verify)
-- [ ] Review Next.js security headers configuration
-- [ ] Check dependency vulnerabilities — `npm audit`
-
-### 3. Scalability Review
-
-- [ ] Evaluate localStorage limits (~5MB) — plan migration path to database
-- [ ] Assess static song/show data approach — plan API integration (Phish.net API?)
-- [ ] Consider server-side rendering vs client-side for data-heavy pages
-- [ ] Plan multi-user support — authentication, shared leaderboards
-- [ ] Evaluate real-time features — live scoring during shows
-- [ ] Plan data sync — what happens when localStorage is cleared
-- [ ] Consider pagination for song catalog (currently renders 100+ cards)
-
-### 4. Code Simplification
-
-- [ ] Deduplicate `SetlistSection` / `SetlistDisplay` components (exist in both `shows/[id]` and `draft/[id]`)
-- [ ] Extract common table styles into reusable component or utility classes
-- [ ] Consolidate filter/sort logic between `draft/page.tsx` and `songs/page.tsx`
-- [ ] Review CSS — remove unused classes, consolidate animation definitions
-- [ ] Simplify scoring engine — verify edge cases, add unit tests
-- [ ] Extract magic numbers (DRAFT_SIZE=15, bust-out threshold=50) into config
-
-### 5. Testing
-
-- [ ] Add unit tests for scoring engine (`scoring.ts`)
-- [ ] Add unit tests for storage utilities (`storage.ts`)
-- [ ] Add component tests for critical flows (draft creation, score display)
-- [ ] Add E2E tests for happy path (create draft → view results)
-- [ ] Set up CI pipeline (GitHub Actions) with lint + typecheck + test
-
-### 6. Performance
-
-- [ ] Audit bundle size — check for unnecessary dependencies
-- [ ] Add `loading.tsx` skeletons for dynamic routes
-- [ ] Consider `React.lazy` / dynamic imports for heavy pages
-- [ ] Profile CSS animations — check for layout thrashing on mobile
-- [ ] Add image optimization if images are added later
-- [ ] Review Lighthouse scores (performance, accessibility, best practices)
-
-### 7. Feature Roadmap (Post-Review)
-
-- [ ] Phish.net API integration for live setlist data
-- [ ] User authentication (clerk/auth.js)
-- [ ] Database migration (Supabase/Planetscale)
-- [ ] Social features — leagues, head-to-head, comments
-- [ ] Push notifications for live show scoring
-- [ ] Historical stats and trends
-- [ ] PWA support for mobile home screen install
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```

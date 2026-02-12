@@ -1,8 +1,8 @@
 "use client";
 
-import { shows, getUpcomingShows, getCompletedShows } from "@/data/shows";
+import { getUpcomingShows, getCompletedShows } from "@/data/shows";
 import { ShowCard } from "@/components/ShowCard";
-import { getDraftsByShow } from "@/lib/storage";
+import { getDraftCountsByShow } from "@/lib/storage";
 import { useEffect, useState } from "react";
 
 export default function ShowsPage() {
@@ -11,11 +11,7 @@ export default function ShowsPage() {
   const [draftCounts, setDraftCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    const counts: Record<string, number> = {};
-    shows.forEach((show) => {
-      counts[show.id] = getDraftsByShow(show.id).length;
-    });
-    setDraftCounts(counts);
+    getDraftCountsByShow().then(setDraftCounts);
   }, []);
 
   return (

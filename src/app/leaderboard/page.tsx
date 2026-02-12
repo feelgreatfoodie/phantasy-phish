@@ -12,8 +12,12 @@ export default function LeaderboardPage() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    setLeaderboard(getLeaderboard());
+    async function load() {
+      const lb = await getLeaderboard();
+      setLeaderboard(lb);
+      setMounted(true);
+    }
+    load();
   }, []);
 
   if (!mounted) {
@@ -53,7 +57,7 @@ export default function LeaderboardPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {leaderboard.slice(0, 3).map((entry, i) => (
                 <div
-                  key={entry.playerName}
+                  key={entry.userId}
                   className={cn(
                     "rounded-2xl border p-4 sm:p-6 text-center transition-all hover:scale-[1.02]",
                     i === 0
@@ -75,7 +79,7 @@ export default function LeaderboardPage() {
                   >
                     #{i + 1}
                   </div>
-                  <h3 className="text-xl font-bold">{entry.playerName}</h3>
+                  <h3 className="text-xl font-bold">{entry.displayName}</h3>
                   <div className="text-2xl sm:text-3xl font-black text-ocean-blue mt-2">
                     {entry.totalPoints}
                   </div>
@@ -128,7 +132,7 @@ export default function LeaderboardPage() {
                 <tbody>
                   {leaderboard.map((entry, i) => (
                     <tr
-                      key={entry.playerName}
+                      key={entry.userId}
                       className="border-b border-border/50 hover:bg-surface-light transition-colors"
                     >
                       <td className="p-2 sm:p-4">
@@ -142,7 +146,7 @@ export default function LeaderboardPage() {
                         </span>
                       </td>
                       <td className="p-2 sm:p-4">
-                        <span className="font-medium text-sm">{entry.playerName}</span>
+                        <span className="font-medium text-sm">{entry.displayName}</span>
                         <div className="text-[10px] sm:text-xs text-text-muted mt-0.5">
                           {entry.drafts.length} draft
                           {entry.drafts.length !== 1 ? "s" : ""}
@@ -175,10 +179,10 @@ export default function LeaderboardPage() {
             <div className="space-y-3">
               {leaderboard.map((entry) => (
                 <div
-                  key={entry.playerName}
+                  key={entry.userId}
                   className="bg-surface rounded-xl border border-border p-3 sm:p-4"
                 >
-                  <h3 className="font-bold text-sm sm:text-base mb-3">{entry.playerName}</h3>
+                  <h3 className="font-bold text-sm sm:text-base mb-3">{entry.displayName}</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                     {entry.drafts
                       .filter((d) => d.scored)

@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/AuthProvider";
 
 const links = [
   { href: "/draft", label: "Draft" },
   { href: "/shows", label: "Shows" },
   { href: "/songs", label: "Songs" },
+  { href: "/leagues", label: "Leagues" },
   { href: "/leaderboard", label: "Leaders" },
 ];
 
 export function Navigation() {
   const pathname = usePathname();
+  const { user, profile, loading, signOut } = useAuth();
 
   return (
     <nav className="bg-surface/80 backdrop-blur-xl sticky top-0 z-50">
@@ -42,9 +45,71 @@ export function Navigation() {
                 </Link>
               );
             })}
+            <div className="w-px h-6 bg-border mx-1" />
+            {loading ? (
+              <div className="w-8 h-8 rounded-full bg-surface-light animate-pulse" />
+            ) : user ? (
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/profile"
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-surface-light transition-colors"
+                >
+                  {profile?.avatar_url ? (
+                    <img
+                      src={profile.avatar_url}
+                      alt={profile.display_name}
+                      className="w-7 h-7 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-deep-sea flex items-center justify-center text-xs font-bold text-foreground">
+                      {(profile?.display_name || user.email || "?")[0].toUpperCase()}
+                    </div>
+                  )}
+                  <span className="text-sm text-text-muted max-w-[100px] truncate">
+                    {profile?.display_name || user.email?.split("@")[0]}
+                  </span>
+                </Link>
+                <button
+                  onClick={signOut}
+                  className="text-xs text-text-dim hover:text-foreground transition-colors px-2 py-1 rounded hover:bg-surface-light"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="px-4 py-2 rounded-lg bg-ocean-blue/20 text-ocean-blue text-sm font-medium hover:bg-ocean-blue/30 transition-colors"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
           {/* Mobile menu */}
-          <div className="sm:hidden">
+          <div className="sm:hidden flex items-center gap-2">
+            {!loading && !user && (
+              <Link
+                href="/login"
+                className="px-3 py-1.5 rounded-lg bg-ocean-blue/20 text-ocean-blue text-xs font-medium"
+              >
+                Sign In
+              </Link>
+            )}
+            {!loading && user && (
+              <Link href="/profile" className="shrink-0">
+                {profile?.avatar_url ? (
+                  <img
+                    src={profile.avatar_url}
+                    alt={profile.display_name}
+                    className="w-7 h-7 rounded-full"
+                  />
+                ) : (
+                  <div className="w-7 h-7 rounded-full bg-deep-sea flex items-center justify-center text-xs font-bold text-foreground">
+                    {(profile?.display_name || user.email || "?")[0].toUpperCase()}
+                  </div>
+                )}
+              </Link>
+            )}
             <MobileMenu pathname={pathname} />
           </div>
         </div>

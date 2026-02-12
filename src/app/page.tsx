@@ -6,20 +6,30 @@ import { songs } from "@/data/songs";
 import { getDrafts, getLeaderboard } from "@/lib/storage";
 import { ShowCard } from "@/components/ShowCard";
 import { useEffect, useState } from "react";
-import { Draft } from "@/lib/types";
+import { useAuth } from "@/components/AuthProvider";
+import { Draft, LeaderboardEntry } from "@/lib/types";
 
 export default function HomePage() {
+  const { user } = useAuth();
   const [drafts, setDrafts] = useState<Draft[]>([]);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setDrafts(getDrafts());
-    setMounted(true);
-  }, []);
+    async function load() {
+      const [d, lb] = await Promise.all([
+        user ? getDrafts(user.id) : Promise.resolve([]),
+        getLeaderboard(),
+      ]);
+      setDrafts(d);
+      setLeaderboard(lb);
+      setMounted(true);
+    }
+    load();
+  }, [user]);
 
   const upcoming = getUpcomingShows();
   const completed = getCompletedShows();
-  const leaderboard = mounted ? getLeaderboard() : [];
 
   return (
     <div className="space-y-10">
@@ -162,13 +172,13 @@ export default function HomePage() {
               </thead>
               <tbody>
                 {leaderboard.slice(0, 5).map((entry, i) => (
-                  <tr key={entry.playerName} className="border-b border-border/50">
+                  <tr key={entry.userId} className="border-b border-border/50">
                     <td className="p-3">
                       <span className="text-sandy-gold font-bold">
                         #{i + 1}
                       </span>
                     </td>
-                    <td className="p-3 font-medium">{entry.playerName}</td>
+                    <td className="p-3 font-medium">{entry.displayName}</td>
                     <td className="p-3 text-right text-ocean-blue font-bold">
                       {entry.totalPoints}
                     </td>

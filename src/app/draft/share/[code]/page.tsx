@@ -3,28 +3,26 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { getDraftById, updateDraft } from "@/lib/storage";
+import { getDraftByShareCode } from "@/lib/storage";
 import { Draft } from "@/lib/types";
 import { getSongById } from "@/data/songs";
 import { getShowById } from "@/data/shows";
 import { scoreDraft } from "@/lib/scoring";
+import { updateDraft } from "@/lib/storage";
 import { SongCard } from "@/components/SongCard";
-import { formatDate } from "@/lib/utils";
-import { cn } from "@/lib/utils";
+import { formatDate, cn } from "@/lib/utils";
 
-export default function DraftDetailPage() {
+export default function SharedDraftPage() {
   const params = useParams();
-  const draftId = params.id as string;
+  const code = params.code as string;
   const [draft, setDraft] = useState<Draft | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     async function load() {
-      const d = await getDraftById(draftId);
+      const d = await getDraftByShareCode(code);
       if (d) {
         const show = getShowById(d.showId);
-        // Auto-score if show is completed and not yet scored
         if (show && show.isCompleted && !d.scored) {
           const scored = scoreDraft(d, show);
           await updateDraft(d.id, {
@@ -40,16 +38,7 @@ export default function DraftDetailPage() {
       setMounted(true);
     }
     load();
-  }, [draftId]);
-
-  const handleShare = () => {
-    if (!draft?.shareCode) return;
-    const url = `${window.location.origin}/draft/share/${draft.shareCode}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
+  }, [code]);
 
   if (!mounted) {
     return (
@@ -64,13 +53,13 @@ export default function DraftDetailPage() {
       <div className="text-center py-20">
         <h1 className="text-2xl font-bold mb-4">Draft Not Found</h1>
         <p className="text-text-muted mb-6">
-          This draft may have been deleted or doesn&apos;t exist.
+          This shared draft link may be invalid or expired.
         </p>
         <Link
-          href="/draft"
+          href="/"
           className="px-6 py-3 rounded-xl bg-ocean-blue text-background font-bold hover:bg-ocean-blue-dark transition-colors"
         >
-          Create New Draft
+          Go Home
         </Link>
       </div>
     );
@@ -82,29 +71,18 @@ export default function DraftDetailPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">{draft.displayName}&apos;s Draft</h1>
-          {show && (
-            <p className="text-text-muted mt-1">
-              {show.venue} - {formatDate(show.date)}
-            </p>
-          )}
+      <div>
+        <div className="text-xs text-text-muted uppercase tracking-wide mb-1">
+          Shared Draft
         </div>
-        <div className="flex gap-3">
-          <button
-            onClick={handleShare}
-            className="px-4 py-2 rounded-xl border border-border text-sm font-medium hover:bg-surface-light transition-colors"
-          >
-            {copied ? "Copied!" : "Share Draft"}
-          </button>
-          <Link
-            href="/draft"
-            className="px-4 py-2 rounded-xl bg-deep-sea text-foreground text-sm font-medium hover:bg-deep-sea-light transition-colors"
-          >
-            New Draft
-          </Link>
-        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold">
+          {draft.displayName}&apos;s Draft
+        </h1>
+        {show && (
+          <p className="text-text-muted mt-1">
+            {show.venue} - {formatDate(show.date)}
+          </p>
+        )}
       </div>
 
       {/* Score summary */}
@@ -117,7 +95,9 @@ export default function DraftDetailPage() {
           <div className="wave-divider my-4" />
           <div className="flex justify-center gap-4 sm:gap-6">
             <div>
-              <div className="text-xl sm:text-2xl font-bold text-seafoam">{playedCount}</div>
+              <div className="text-xl sm:text-2xl font-bold text-seafoam">
+                {playedCount}
+              </div>
               <div className="text-xs text-text-muted">Songs Hit</div>
             </div>
             <div>
@@ -145,7 +125,8 @@ export default function DraftDetailPage() {
             Awaiting Results
           </div>
           <p className="text-text-muted mt-2">
-            This draft will be scored automatically once the show setlist is entered.
+            This draft will be scored automatically once the show setlist
+            is entered.
           </p>
         </div>
       )}
@@ -183,85 +164,14 @@ export default function DraftDetailPage() {
         </div>
       </div>
 
-      {/* Show setlist comparison */}
-      {draft.scored && show && show.isCompleted && (
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold">Actual Setlist</h2>
-
-          <SetlistSection
-            title="Set 1"
-            entries={show.set1}
-            draftSongs={draft.songIds}
-          />
-          <SetlistSection
-            title="Set 2"
-            entries={show.set2}
-            draftSongs={draft.songIds}
-          />
-          <SetlistSection
-            title="Encore"
-            entries={show.encore}
-            draftSongs={draft.songIds}
-          />
-        </div>
-      )}
-    </div>
-  );
-}
-
-function SetlistSection({
-  title,
-  entries,
-  draftSongs,
-}: {
-  title: string;
-  entries: { songId: string; isOpener: boolean; isCloser: boolean }[];
-  draftSongs: string[];
-}) {
-  return (
-    <div className="bg-surface rounded-xl border border-border p-4">
-      <h3 className="font-bold text-sandy-gold mb-3">{title}</h3>
-      <div className="space-y-1.5">
-        {entries.map((entry, i) => {
-          const song = getSongById(entry.songId);
-          const wasDrafted = draftSongs.includes(entry.songId);
-          return (
-            <div
-              key={entry.songId}
-              className={cn(
-                "flex items-center justify-between p-2 rounded-lg",
-                wasDrafted ? "bg-success/10" : "bg-surface-light"
-              )}
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-text-muted w-5">{i + 1}.</span>
-                <span
-                  className={cn(
-                    "font-medium text-sm",
-                    wasDrafted && "text-success"
-                  )}
-                >
-                  {song?.name || entry.songId}
-                </span>
-                {entry.isOpener && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-coral-red/20 text-coral-red">
-                    Opener
-                  </span>
-                )}
-                {entry.isCloser && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-deep-sea text-ocean-blue">
-                    Closer
-                  </span>
-                )}
-              </div>
-              {wasDrafted && (
-                <span className="text-xs text-success font-medium">
-                  DRAFTED
-                </span>
-              )}
-            </div>
-          );
-        })}
+      {/* CTA */}
+      <div className="text-center pt-4">
+        <Link
+          href="/draft"
+          className="px-6 py-3 rounded-xl bg-ocean-blue text-background font-bold hover:bg-ocean-blue-dark transition-colors"
+        >
+          Create Your Own Draft
+        </Link>
       </div>
     </div>
   );

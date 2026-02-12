@@ -1,6 +1,6 @@
 # Phantasy Phish
 
-A fantasy sports-style web app for Phish concert setlists. Draft songs you think will be played at upcoming shows, score points based on actual setlists, and compete with friends.
+A fantasy sports-style web app for Phish concert setlists. Draft songs you think will be played at upcoming shows, score points based on actual setlists, and compete with friends in leagues.
 
 **Live:** [phantasy-phish.vercel.app](https://phantasy-phish.vercel.app)
 
@@ -8,10 +8,12 @@ A fantasy sports-style web app for Phish concert setlists. Draft songs you think
 
 - **Song Draft** - Pick 15 songs from a catalog of 100+ real Phish songs
 - **Scoring System** - Points for songs played, openers, closers, bust-outs, and covers
-- **Leaderboard** - Rankings across all participants and shows
+- **Leaderboard** - Global rankings across all participants and shows
+- **Leagues** - Create private leagues, invite friends via code, per-league leaderboards (in progress)
 - **Show Results** - View actual setlists and see how your draft scored
 - **Song Catalog** - Browse the full catalog with stats (times played, gap, debut year)
-- **Shareable Drafts** - Share your draft via URL encoding
+- **Shareable Drafts** - Share your draft via unique share code URL
+- **Auth** - Sign in with Google or email magic link
 
 ## Scoring
 
@@ -31,6 +33,7 @@ A fantasy sports-style web app for Phish concert setlists. Draft songs you think
 
 - Node.js 18+
 - npm
+- A Supabase project (for auth and data persistence)
 
 ### Installation
 
@@ -38,7 +41,24 @@ A fantasy sports-style web app for Phish concert setlists. Draft songs you think
 git clone https://github.com/feelgreatfoodie/phantasy-phish.git
 cd phantasy-phish
 npm install
-cp .env.example .env.local
+```
+
+Create `.env.local` with your Supabase credentials:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+Run the database migration in your Supabase SQL Editor:
+
+```bash
+# Copy contents of supabase/migrations/001_initial_schema.sql
+```
+
+Then start the dev server:
+
+```bash
 npm run dev
 ```
 
@@ -56,9 +76,9 @@ npm start
 - **Next.js 16** (App Router)
 - **React 19**
 - **TypeScript**
-- **Tailwind CSS v4**
-- **Local Storage** for draft persistence (no database needed for MVP)
-- **Static JSON** for song catalog and show data
+- **Tailwind CSS v4** (`@theme inline` for CSS variables)
+- **Supabase** for auth (Google OAuth, email magic link) and Postgres database
+- **Static TypeScript** for song catalog and show data
 - **Vercel** for deployment
 
 ## Project Structure
@@ -67,11 +87,14 @@ npm start
 src/
   app/
     page.tsx              # Home page
-    layout.tsx            # Root layout with navigation
-    globals.css           # Psychedelic theme and animations
+    layout.tsx            # Root layout with AuthProvider
+    globals.css           # Ocean theme and animations
+    login/page.tsx        # Sign in (Google, magic link)
+    auth/callback/route.ts # OAuth callback handler
     draft/
       page.tsx            # Song drafting interface
       [id]/page.tsx       # Draft detail / results view
+      share/[code]/page.tsx # Public shared draft view
     shows/
       page.tsx            # Shows listing
       [id]/page.tsx       # Show detail with setlist
@@ -80,7 +103,8 @@ src/
     songs/
       page.tsx            # Full song catalog
   components/
-    Navigation.tsx        # Frosted glass nav with PP logo
+    AuthProvider.tsx       # Auth context (user, profile, signOut)
+    Navigation.tsx        # Frosted glass nav with auth state
     SongCard.tsx          # Reusable song display card
     ShowCard.tsx          # Reusable show display card
   data/
@@ -88,19 +112,37 @@ src/
     shows.ts              # Show data with setlists
   lib/
     scoring.ts            # Scoring engine
-    storage.ts            # localStorage persistence
+    storage.ts            # Supabase CRUD for drafts + leaderboard
+    leagues.ts            # Supabase CRUD for leagues
     types.ts              # TypeScript interfaces
     utils.ts              # Formatting utilities
+    supabase/
+      client.ts           # Browser Supabase client
+      server.ts           # Server Supabase client
+      middleware.ts        # Session refresh + route protection
+  middleware.ts           # Next.js middleware entry point
+supabase/
+  migrations/
+    001_initial_schema.sql # Full DB schema (profiles, drafts, leagues)
 ```
 
 ## Design
 
-- Psychedelic concert poster aesthetic with animated gradient text and neon glows
-- Color palette: electric teal (#00ffcc), hot pink (#ff0080), deep purple (#7b2ff7), acid green (#39ff14), golden (#ffaa00)
-- Frosted glass navigation with rainbow divider
+- Ocean-themed aesthetic with deep sea colors, neon glows, and wave animations
+- Color palette: ocean blue (#00d4ff), deep sea (#0a3d62), coral red (#ff6b6b), sandy gold (#f4a261), seafoam (#2ed8a3)
+- Frosted glass navigation with ocean gradient divider
 - Mobile-first responsive design (iPhone 7 / 375px and up)
 - Card-based UI with animated score reveals
-- Animated background with layered radial gradients
+
+## Database
+
+Supabase Postgres with Row Level Security:
+- **profiles** — auto-created on signup via trigger
+- **drafts** — user drafts with song picks and scores
+- **leagues** — private groups with invite codes
+- **league_members** — many-to-many user/league membership
+
+All tables publicly readable, writes restricted to authenticated owner.
 
 ## Data
 
@@ -110,4 +152,4 @@ The song catalog includes 100+ real Phish songs with:
 - Cover song identification with original artist
 - Bust-out status (songs with 50+ show gap)
 
-Sample show data includes 4 completed MSG NYE 2024 shows and 1 upcoming show.
+Show data includes 2024-2026 tour dates with full setlists for completed shows.

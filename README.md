@@ -2,6 +2,8 @@
 
 A fantasy sports-style web app for Phish concert setlists. Draft songs you think will be played at upcoming shows, score points based on actual setlists, and compete with friends.
 
+**Live:** [phantasy-phish.vercel.app](https://phantasy-phish.vercel.app)
+
 ## Features
 
 - **Song Draft** - Pick 15 songs from a catalog of 100+ real Phish songs
@@ -33,17 +35,10 @@ A fantasy sports-style web app for Phish concert setlists. Draft songs you think
 ### Installation
 
 ```bash
-# Clone the repository
-git clone <repo-url>
-cd fantasy-phish
-
-# Install dependencies
+git clone https://github.com/feelgreatfoodie/phantasy-phish.git
+cd phantasy-phish
 npm install
-
-# Copy environment variables
 cp .env.example .env.local
-
-# Run the development server
 npm run dev
 ```
 
@@ -59,10 +54,12 @@ npm start
 ## Tech Stack
 
 - **Next.js 16** (App Router)
+- **React 19**
 - **TypeScript**
 - **Tailwind CSS v4**
 - **Local Storage** for draft persistence (no database needed for MVP)
 - **Static JSON** for song catalog and show data
+- **Vercel** for deployment
 
 ## Project Structure
 
@@ -71,7 +68,7 @@ src/
   app/
     page.tsx              # Home page
     layout.tsx            # Root layout with navigation
-    globals.css           # Global styles and theme
+    globals.css           # Psychedelic theme and animations
     draft/
       page.tsx            # Song drafting interface
       [id]/page.tsx       # Draft detail / results view
@@ -83,7 +80,7 @@ src/
     songs/
       page.tsx            # Full song catalog
   components/
-    Navigation.tsx        # Top navigation bar
+    Navigation.tsx        # Frosted glass nav with PP logo
     SongCard.tsx          # Reusable song display card
     ShowCard.tsx          # Reusable show display card
   data/
@@ -98,10 +95,12 @@ src/
 
 ## Design
 
-- Dark theme with deep purple (#2d1b69), electric teal (#00d4aa), and warm orange (#ff6b35)
-- Mobile-first responsive design
+- Psychedelic concert poster aesthetic with animated gradient text and neon glows
+- Color palette: electric teal (#00ffcc), hot pink (#ff0080), deep purple (#7b2ff7), acid green (#39ff14), golden (#ffaa00)
+- Frosted glass navigation with rainbow divider
+- Mobile-first responsive design (iPhone 7 / 375px and up)
 - Card-based UI with animated score reveals
-- Subtle Fishman donut pattern background elements
+- Animated background with layered radial gradients
 
 ## Data
 

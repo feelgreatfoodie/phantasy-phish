@@ -26,9 +26,9 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="text-center py-16 relative overflow-hidden">
         <div className="fishman-pattern absolute inset-0 opacity-40" />
-        <div className="absolute inset-0 bg-gradient-to-b from-deep-purple/10 via-transparent to-hot-pink/5" />
+        <div className="absolute inset-0 bg-gradient-to-b from-deep-sea/10 via-transparent to-coral-red/5" />
         <div className="relative">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black psychedelic-text">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black ocean-text">
             Phantasy Phish
           </h1>
           <p className="mt-3 sm:mt-4 text-base sm:text-lg text-text-muted max-w-xl mx-auto px-2">
@@ -38,13 +38,13 @@ export default function HomePage() {
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/draft"
-              className="px-8 py-3 rounded-xl bg-gradient-to-r from-electric-teal to-acid-green text-background font-bold text-lg hover:shadow-lg hover:shadow-electric-teal/25 transition-all hover:scale-105"
+              className="px-8 py-3 rounded-xl bg-gradient-to-r from-ocean-blue to-seafoam text-background font-bold text-lg hover:shadow-lg hover:shadow-ocean-blue/25 transition-all hover:scale-105"
             >
               Start Drafting
             </Link>
             <Link
               href="/shows"
-              className="px-8 py-3 rounded-xl border-2 border-deep-purple text-foreground font-bold text-lg hover:bg-deep-purple/30 hover:border-hot-pink hover:shadow-lg hover:shadow-hot-pink/15 transition-all"
+              className="px-8 py-3 rounded-xl border-2 border-deep-sea text-foreground font-bold text-lg hover:bg-deep-sea/30 hover:border-coral-red hover:shadow-lg hover:shadow-coral-red/15 transition-all"
             >
               View Shows
             </Link>
@@ -73,7 +73,7 @@ export default function HomePage() {
       </section>
 
       {/* How Scoring Works */}
-      <section className="bg-surface rounded-2xl p-4 sm:p-6 border border-deep-purple/30">
+      <section className="bg-surface rounded-2xl p-4 sm:p-6 border border-deep-sea/30">
         <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">How Scoring Works</h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
           <ScoreRule label="Song in Set 1 or 2" points={10} />
@@ -92,7 +92,7 @@ export default function HomePage() {
             <h2 className="text-2xl font-bold">Upcoming Shows</h2>
             <Link
               href="/shows"
-              className="text-electric-teal text-sm font-medium hover:underline"
+              className="text-ocean-blue text-sm font-medium hover:underline"
             >
               View all
             </Link>
@@ -112,7 +112,7 @@ export default function HomePage() {
             <h2 className="text-2xl font-bold">Recent Shows</h2>
             <Link
               href="/shows"
-              className="text-electric-teal text-sm font-medium hover:underline"
+              className="text-ocean-blue text-sm font-medium hover:underline"
             >
               View all
             </Link>
@@ -140,7 +140,7 @@ export default function HomePage() {
             <h2 className="text-2xl font-bold">Leaderboard</h2>
             <Link
               href="/leaderboard"
-              className="text-electric-teal text-sm font-medium hover:underline"
+              className="text-ocean-blue text-sm font-medium hover:underline"
             >
               Full standings
             </Link>
@@ -164,12 +164,12 @@ export default function HomePage() {
                 {leaderboard.slice(0, 5).map((entry, i) => (
                   <tr key={entry.playerName} className="border-b border-border/50">
                     <td className="p-3">
-                      <span className="text-golden font-bold">
+                      <span className="text-sandy-gold font-bold">
                         #{i + 1}
                       </span>
                     </td>
                     <td className="p-3 font-medium">{entry.playerName}</td>
-                    <td className="p-3 text-right text-electric-teal font-bold">
+                    <td className="p-3 text-right text-ocean-blue font-bold">
                       {entry.totalPoints}
                     </td>
                   </tr>
@@ -193,14 +193,14 @@ function StatBox({
   color: "teal" | "orange" | "purple";
 }) {
   const colorMap = {
-    teal: "text-electric-teal neon-glow",
-    orange: "text-hot-pink neon-glow-pink",
-    purple: "text-deep-purple-light",
+    teal: "text-ocean-blue neon-glow",
+    orange: "text-coral-red neon-glow-coral",
+    purple: "text-deep-sea-light",
   };
   const borderMap = {
-    teal: "border-electric-teal/20 hover:border-electric-teal/40",
-    orange: "border-hot-pink/20 hover:border-hot-pink/40",
-    purple: "border-deep-purple/30 hover:border-deep-purple/50",
+    teal: "border-ocean-blue/20 hover:border-ocean-blue/40",
+    orange: "border-coral-red/20 hover:border-coral-red/40",
+    purple: "border-deep-sea/30 hover:border-deep-sea/50",
   };
   return (
     <div className={`bg-surface rounded-xl p-3 sm:p-4 border ${borderMap[color]} text-center transition-colors`}>
@@ -212,9 +212,9 @@ function StatBox({
 
 function ScoreRule({ label, points }: { label: string; points: number }) {
   return (
-    <div className="flex items-center justify-between p-2 sm:p-3 bg-surface-light rounded-lg border border-border/50 hover:border-deep-purple/40 transition-colors">
+    <div className="flex items-center justify-between p-2 sm:p-3 bg-surface-light rounded-lg border border-border/50 hover:border-deep-sea/40 transition-colors">
       <span className="text-xs sm:text-sm">{label}</span>
-      <span className="text-electric-teal font-bold text-xs sm:text-sm neon-glow">+{points}</span>
+      <span className="text-ocean-blue font-bold text-xs sm:text-sm neon-glow">+{points}</span>
     </div>
   );
 }

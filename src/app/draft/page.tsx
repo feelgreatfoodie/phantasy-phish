@@ -149,7 +149,7 @@ export default function DraftPage() {
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
             placeholder="Enter your name"
-            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm placeholder:text-text-muted focus:outline-none focus:border-electric-teal"
+            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm placeholder:text-text-muted focus:outline-none focus:border-ocean-blue"
           />
         </div>
         <div>
@@ -159,7 +159,7 @@ export default function DraftPage() {
           <select
             value={selectedShow}
             onChange={(e) => setSelectedShow(e.target.value)}
-            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm focus:outline-none focus:border-electric-teal"
+            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm focus:outline-none focus:border-ocean-blue"
           >
             <option value="">Select a show</option>
             {allShows.map((show) => (
@@ -206,7 +206,7 @@ export default function DraftPage() {
               <button
                 key={song.id}
                 onClick={() => toggleSong(song.id)}
-                className="group flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-electric-teal/10 border border-electric-teal/30 text-electric-teal text-xs sm:text-sm hover:bg-danger/10 hover:border-danger/30 hover:text-danger transition-colors"
+                className="group flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-ocean-blue/10 border border-ocean-blue/30 text-ocean-blue text-xs sm:text-sm hover:bg-danger/10 hover:border-danger/30 hover:text-danger transition-colors"
               >
                 <span>{song.name}</span>
                 <svg
@@ -235,7 +235,7 @@ export default function DraftPage() {
                 "w-full py-3 rounded-xl font-bold text-lg transition-colors",
                 showSaved
                   ? "bg-success text-background"
-                  : "bg-electric-teal text-background hover:bg-electric-teal-dark"
+                  : "bg-ocean-blue text-background hover:bg-ocean-blue-dark"
               )}
             >
               {showSaved ? "Draft Saved!" : `Save Draft (${selectedSongs.length} songs)`}
@@ -268,7 +268,7 @@ export default function DraftPage() {
                       {draft.songIds.length} songs
                     </span>
                     {draft.scored && (
-                      <span className="text-electric-teal font-bold text-sm">
+                      <span className="text-ocean-blue font-bold text-sm">
                         {draft.totalScore} pts
                       </span>
                     )}
@@ -292,14 +292,14 @@ export default function DraftPage() {
                 setLetterFilter(null);
               }}
               placeholder="Search songs..."
-              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm placeholder:text-text-muted focus:outline-none focus:border-electric-teal"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm placeholder:text-text-muted focus:outline-none focus:border-ocean-blue"
             />
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortOption)}
-              className="flex-1 sm:flex-initial px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-xs sm:text-sm focus:outline-none focus:border-electric-teal"
+              className="flex-1 sm:flex-initial px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-xs sm:text-sm focus:outline-none focus:border-ocean-blue"
             >
               <option value="name">A-Z</option>
               <option value="timesPlayed">Most Played</option>
@@ -309,7 +309,7 @@ export default function DraftPage() {
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value as FilterOption)}
-              className="flex-1 sm:flex-initial px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-xs sm:text-sm focus:outline-none focus:border-electric-teal"
+              className="flex-1 sm:flex-initial px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-xs sm:text-sm focus:outline-none focus:border-ocean-blue"
             >
               <option value="all">All</option>
               <option value="originals">Originals</option>
@@ -326,7 +326,7 @@ export default function DraftPage() {
             className={cn(
               "w-7 h-7 sm:w-8 sm:h-8 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold flex items-center justify-center transition-colors",
               letterFilter === null
-                ? "bg-electric-teal text-background"
+                ? "bg-ocean-blue text-background"
                 : "bg-surface-light text-text-muted hover:text-foreground"
             )}
           >
@@ -341,7 +341,7 @@ export default function DraftPage() {
               className={cn(
                 "w-7 h-7 sm:w-8 sm:h-8 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold flex items-center justify-center transition-colors",
                 letterFilter === letter
-                  ? "bg-electric-teal text-background"
+                  ? "bg-ocean-blue text-background"
                   : "bg-surface-light text-text-muted hover:text-foreground"
               )}
             >
@@ -376,7 +376,7 @@ export default function DraftPage() {
               setLetterFilter(null);
               setFilter("all");
             }}
-            className="mt-2 text-electric-teal hover:underline"
+            className="mt-2 text-ocean-blue hover:underline"
           >
             Clear filters
           </button>

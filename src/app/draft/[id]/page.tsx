@@ -64,7 +64,7 @@ export default function DraftDetailPage() {
         </p>
         <Link
           href="/draft"
-          className="px-6 py-3 rounded-xl bg-electric-teal text-background font-bold hover:bg-electric-teal-dark transition-colors"
+          className="px-6 py-3 rounded-xl bg-ocean-blue text-background font-bold hover:bg-ocean-blue-dark transition-colors"
         >
           Create New Draft
         </Link>
@@ -96,7 +96,7 @@ export default function DraftDetailPage() {
           </button>
           <Link
             href="/draft"
-            className="px-4 py-2 rounded-xl bg-deep-purple text-foreground text-sm font-medium hover:bg-deep-purple-light transition-colors"
+            className="px-4 py-2 rounded-xl bg-deep-sea text-foreground text-sm font-medium hover:bg-deep-sea-light transition-colors"
           >
             New Draft
           </Link>
@@ -105,25 +105,25 @@ export default function DraftDetailPage() {
 
       {/* Score summary */}
       {draft.scored && (
-        <div className="bg-gradient-to-b from-deep-purple/15 to-surface rounded-2xl border border-deep-purple/30 p-4 sm:p-6 text-center">
-          <div className="text-4xl sm:text-5xl font-black text-electric-teal neon-glow score-reveal">
+        <div className="bg-gradient-to-b from-deep-sea/15 to-surface rounded-2xl border border-deep-sea/30 p-4 sm:p-6 text-center">
+          <div className="text-4xl sm:text-5xl font-black text-ocean-blue neon-glow score-reveal">
             {draft.totalScore}
           </div>
           <div className="text-text-muted mt-1">Total Points</div>
-          <div className="rainbow-divider my-4" />
+          <div className="wave-divider my-4" />
           <div className="flex justify-center gap-4 sm:gap-6">
             <div>
-              <div className="text-xl sm:text-2xl font-bold text-acid-green">{playedCount}</div>
+              <div className="text-xl sm:text-2xl font-bold text-seafoam">{playedCount}</div>
               <div className="text-xs text-text-muted">Songs Hit</div>
             </div>
             <div>
-              <div className="text-xl sm:text-2xl font-bold text-hot-pink">
+              <div className="text-xl sm:text-2xl font-bold text-coral-red">
                 {draft.songIds.length - playedCount}
               </div>
               <div className="text-xs text-text-muted">Missed</div>
             </div>
             <div>
-              <div className="text-xl sm:text-2xl font-bold text-golden">
+              <div className="text-xl sm:text-2xl font-bold text-sandy-gold">
                 {Math.round(
                   (playedCount / draft.songIds.length) * 100
                 )}
@@ -136,8 +136,8 @@ export default function DraftDetailPage() {
       )}
 
       {!draft.scored && show && !show.isCompleted && (
-        <div className="bg-gradient-to-b from-hot-pink/10 to-surface rounded-2xl border border-hot-pink/20 p-6 text-center">
-          <div className="text-xl font-bold text-hot-pink breathe">
+        <div className="bg-gradient-to-b from-coral-red/10 to-surface rounded-2xl border border-coral-red/20 p-6 text-center">
+          <div className="text-xl font-bold text-coral-red breathe">
             Awaiting Results
           </div>
           <p className="text-text-muted mt-2">
@@ -205,7 +205,7 @@ export default function DraftDetailPage() {
       {shareUrl && (
         <div className="bg-surface-light rounded-xl p-4 border border-border">
           <p className="text-sm text-text-muted mb-2">Share this draft:</p>
-          <code className="text-xs text-electric-teal break-all">{shareUrl}</code>
+          <code className="text-xs text-ocean-blue break-all">{shareUrl}</code>
         </div>
       )}
     </div>
@@ -223,7 +223,7 @@ function SetlistSection({
 }) {
   return (
     <div className="bg-surface rounded-xl border border-border p-4">
-      <h3 className="font-bold text-golden mb-3">{title}</h3>
+      <h3 className="font-bold text-sandy-gold mb-3">{title}</h3>
       <div className="space-y-1.5">
         {entries.map((entry, i) => {
           const song = getSongById(entry.songId);
@@ -247,12 +247,12 @@ function SetlistSection({
                   {song?.name || entry.songId}
                 </span>
                 {entry.isOpener && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-hot-pink/20 text-hot-pink">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-coral-red/20 text-coral-red">
                     Opener
                   </span>
                 )}
                 {entry.isCloser && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-deep-purple text-electric-teal">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-deep-sea text-ocean-blue">
                     Closer
                   </span>
                 )}

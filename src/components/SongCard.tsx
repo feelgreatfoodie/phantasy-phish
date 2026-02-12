@@ -34,8 +34,8 @@ export function SongCard({
       className={cn(
         "song-card w-full text-left p-3 rounded-xl border transition-all",
         selected
-          ? "border-electric-teal bg-electric-teal/10 shadow-lg shadow-electric-teal/10"
-          : "border-border bg-surface-light hover:border-deep-purple-light",
+          ? "border-ocean-blue bg-ocean-blue/10 shadow-lg shadow-ocean-blue/10"
+          : "border-border bg-surface-light hover:border-deep-sea-light",
         disabled && !selected && "opacity-40 cursor-not-allowed",
         !disabled && "cursor-pointer",
         scoreInfo?.played && "border-success bg-success/10",
@@ -48,7 +48,7 @@ export function SongCard({
             <h3
               className={cn(
                 "font-semibold text-sm truncate",
-                selected && "text-electric-teal",
+                selected && "text-ocean-blue",
                 scoreInfo?.played && "text-success"
               )}
             >
@@ -57,12 +57,12 @@ export function SongCard({
           </div>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {song.isCover && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-hot-pink/20 text-hot-pink">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-coral-red/20 text-coral-red">
                 Cover
               </span>
             )}
             {isBustOutCandidate && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-deep-purple text-electric-teal">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-deep-sea text-ocean-blue">
                 Bust-out
               </span>
             )}
@@ -78,7 +78,7 @@ export function SongCard({
             <span
               className={cn(
                 "text-lg font-bold score-reveal",
-                scoreInfo.points > 0 ? "text-electric-teal" : "text-text-muted"
+                scoreInfo.points > 0 ? "text-ocean-blue" : "text-text-muted"
               )}
             >
               {scoreInfo.points}
@@ -87,7 +87,7 @@ export function SongCard({
           </div>
         ) : (
           selected && (
-            <div className="w-6 h-6 rounded-full bg-electric-teal flex items-center justify-center flex-shrink-0">
+            <div className="w-6 h-6 rounded-full bg-ocean-blue flex items-center justify-center flex-shrink-0">
               <svg
                 className="w-4 h-4 text-background"
                 fill="none"
@@ -121,7 +121,7 @@ export function SongCard({
                 "text-[10px] px-1.5 py-0.5 rounded",
                 item === "Not played"
                   ? "bg-danger/10 text-danger"
-                  : "bg-electric-teal/10 text-electric-teal"
+                  : "bg-ocean-blue/10 text-ocean-blue"
               )}
             >
               {item}

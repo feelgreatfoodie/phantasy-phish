@@ -41,7 +41,7 @@ export default function LeaderboardPage() {
           </p>
           <Link
             href="/draft"
-            className="px-6 py-3 rounded-xl bg-electric-teal text-background font-bold hover:bg-electric-teal-dark transition-colors"
+            className="px-6 py-3 rounded-xl bg-ocean-blue text-background font-bold hover:bg-ocean-blue-dark transition-colors"
           >
             Start Drafting
           </Link>
@@ -57,26 +57,26 @@ export default function LeaderboardPage() {
                   className={cn(
                     "rounded-2xl border p-4 sm:p-6 text-center transition-all hover:scale-[1.02]",
                     i === 0
-                      ? "bg-gradient-to-b from-electric-teal/15 via-deep-purple/10 to-surface border-electric-teal/30 shadow-lg shadow-electric-teal/10 sm:order-2"
+                      ? "bg-gradient-to-b from-ocean-blue/15 via-deep-sea/10 to-surface border-ocean-blue/30 shadow-lg shadow-ocean-blue/10 sm:order-2"
                       : i === 1
-                      ? "bg-gradient-to-b from-hot-pink/10 to-surface border-hot-pink/20 sm:order-1"
-                      : "bg-gradient-to-b from-deep-purple/10 to-surface border-deep-purple/20 sm:order-3"
+                      ? "bg-gradient-to-b from-coral-red/10 to-surface border-coral-red/20 sm:order-1"
+                      : "bg-gradient-to-b from-deep-sea/10 to-surface border-deep-sea/20 sm:order-3"
                   )}
                 >
                   <div
                     className={cn(
                       "text-4xl font-black mb-2",
                       i === 0
-                        ? "text-electric-teal neon-glow"
+                        ? "text-ocean-blue neon-glow"
                         : i === 1
-                        ? "text-hot-pink neon-glow-pink"
-                        : "text-deep-purple-light"
+                        ? "text-coral-red neon-glow-coral"
+                        : "text-deep-sea-light"
                     )}
                   >
                     #{i + 1}
                   </div>
                   <h3 className="text-xl font-bold">{entry.playerName}</h3>
-                  <div className="text-2xl sm:text-3xl font-black text-electric-teal mt-2">
+                  <div className="text-2xl sm:text-3xl font-black text-ocean-blue mt-2">
                     {entry.totalPoints}
                   </div>
                   <div className="text-xs text-text-muted">total points</div>
@@ -135,7 +135,7 @@ export default function LeaderboardPage() {
                         <span
                           className={cn(
                             "font-bold text-sm",
-                            i < 3 ? "text-golden" : "text-text-muted"
+                            i < 3 ? "text-sandy-gold" : "text-text-muted"
                           )}
                         >
                           #{i + 1}
@@ -149,7 +149,7 @@ export default function LeaderboardPage() {
                         </div>
                       </td>
                       <td className="p-2 sm:p-4 text-right">
-                        <span className="text-electric-teal font-bold text-base sm:text-lg">
+                        <span className="text-ocean-blue font-bold text-base sm:text-lg">
                           {entry.totalPoints}
                         </span>
                       </td>
@@ -202,7 +202,7 @@ export default function LeaderboardPage() {
                                 {show?.venue}
                               </div>
                             </div>
-                            <span className="text-electric-teal font-bold">
+                            <span className="text-ocean-blue font-bold">
                               {draft.totalScore}
                             </span>
                           </Link>

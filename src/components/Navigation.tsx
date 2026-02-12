@@ -18,10 +18,10 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-hot-pink via-deep-purple to-electric-teal flex items-center justify-center text-background font-black text-sm sm:text-lg shadow-lg shadow-deep-purple/30">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-coral-red via-deep-sea to-ocean-blue flex items-center justify-center text-background font-black text-sm sm:text-lg shadow-lg shadow-deep-sea/30">
               PP
             </div>
-            <span className="text-base sm:text-xl font-black psychedelic-text">
+            <span className="text-base sm:text-xl font-black ocean-text">
               Phantasy Phish
             </span>
           </Link>
@@ -34,7 +34,7 @@ export function Navigation() {
                   href={link.href}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-deep-purple/40 text-electric-teal neon-glow"
+                      ? "bg-deep-sea/40 text-ocean-blue neon-glow"
                       : "text-text-muted hover:text-foreground hover:bg-surface-light"
                   }`}
                 >
@@ -49,7 +49,7 @@ export function Navigation() {
           </div>
         </div>
       </div>
-      <div className="rainbow-divider" />
+      <div className="wave-divider" />
     </nav>
   );
 }
@@ -68,7 +68,7 @@ function MobileMenu({ pathname }: { pathname: string }) {
             href={link.href}
             className={`px-2 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
               isActive
-                ? "bg-deep-purple/40 text-electric-teal"
+                ? "bg-deep-sea/40 text-ocean-blue"
                 : "text-text-muted hover:text-foreground"
             }`}
           >

@@ -44,7 +44,7 @@ export default function ShowDetailPage() {
         <h1 className="text-2xl font-bold mb-4">Show Not Found</h1>
         <Link
           href="/shows"
-          className="text-electric-teal hover:underline"
+          className="text-ocean-blue hover:underline"
         >
           Back to Shows
         </Link>
@@ -66,7 +66,7 @@ export default function ShowDetailPage() {
             <p className="text-text-muted">
               {show.city}, {show.state}
             </p>
-            <p className="text-electric-teal font-medium mt-1">
+            <p className="text-ocean-blue font-medium mt-1">
               {formatDate(show.date)}
             </p>
           </div>
@@ -76,14 +76,14 @@ export default function ShowDetailPage() {
                 "px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold",
                 show.isCompleted
                   ? "bg-success/20 text-success"
-                  : "bg-hot-pink/20 text-hot-pink"
+                  : "bg-coral-red/20 text-coral-red"
               )}
             >
               {show.isCompleted ? "Completed" : "Upcoming"}
             </span>
             <Link
               href="/draft"
-              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-electric-teal text-background font-bold text-xs sm:text-sm hover:bg-electric-teal-dark transition-colors"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-ocean-blue text-background font-bold text-xs sm:text-sm hover:bg-ocean-blue-dark transition-colors"
             >
               Draft for this show
             </Link>
@@ -112,7 +112,7 @@ export default function ShowDetailPage() {
               </p>
               <Link
                 href="/draft"
-                className="inline-block mt-4 px-6 py-2 rounded-xl bg-electric-teal text-background font-bold text-sm hover:bg-electric-teal-dark transition-colors"
+                className="inline-block mt-4 px-6 py-2 rounded-xl bg-ocean-blue text-background font-bold text-sm hover:bg-ocean-blue-dark transition-colors"
               >
                 Be the first
               </Link>
@@ -123,10 +123,10 @@ export default function ShowDetailPage() {
                 <Link
                   key={draft.id}
                   href={`/draft/${draft.id}`}
-                  className="flex items-center justify-between p-3 sm:p-4 rounded-xl bg-surface border border-border hover:border-deep-purple-light transition-colors"
+                  className="flex items-center justify-between p-3 sm:p-4 rounded-xl bg-surface border border-border hover:border-deep-sea-light transition-colors"
                 >
                   <div className="flex items-center gap-3 sm:gap-4">
-                    <span className="text-golden font-bold text-base sm:text-lg w-6 sm:w-8">
+                    <span className="text-sandy-gold font-bold text-base sm:text-lg w-6 sm:w-8">
                       #{i + 1}
                     </span>
                     <div>
@@ -138,7 +138,7 @@ export default function ShowDetailPage() {
                   </div>
                   {draft.scored ? (
                     <div className="text-right">
-                      <div className="text-2xl font-black text-electric-teal">
+                      <div className="text-2xl font-black text-ocean-blue">
                         {draft.totalScore}
                       </div>
                       <div className="text-xs text-text-muted">
@@ -177,7 +177,7 @@ function SetSection({
 }) {
   return (
     <div className="bg-surface rounded-xl border border-border p-4">
-      <h3 className="font-bold text-golden mb-3">{title}</h3>
+      <h3 className="font-bold text-sandy-gold mb-3">{title}</h3>
       <div className="space-y-1.5">
         {entries.map((entry, i) => {
           const song = getSongById(entry.songId);
@@ -192,17 +192,17 @@ function SetSection({
               </span>
               <div className="flex gap-1">
                 {entry.isOpener && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-hot-pink/20 text-hot-pink">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-coral-red/20 text-coral-red">
                     Opener
                   </span>
                 )}
                 {entry.isCloser && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-deep-purple text-electric-teal">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-deep-sea text-ocean-blue">
                     Closer
                   </span>
                 )}
                 {song?.isCover && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-hot-pink/20 text-hot-pink">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-coral-red/20 text-coral-red">
                     Cover
                   </span>
                 )}

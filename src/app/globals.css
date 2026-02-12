@@ -1,27 +1,25 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0a0612;
-  --color-foreground: #f0e8ff;
-  --color-deep-purple: #7b2ff7;
-  --color-deep-purple-light: #9b5ffa;
-  --color-electric-teal: #00ffcc;
-  --color-electric-teal-dark: #00d4aa;
-  --color-warm-orange: #ff6b35;
-  --color-warm-orange-dark: #e55a2b;
-  --color-hot-pink: #ff0080;
-  --color-hot-pink-dark: #cc0066;
-  --color-acid-green: #39ff14;
-  --color-golden: #ffaa00;
-  --color-laser-blue: #00bfff;
-  --color-surface: #110b24;
-  --color-surface-light: #1a1240;
-  --color-surface-lighter: #231a55;
-  --color-border: #2e1f6e;
-  --color-text-muted: #9988cc;
-  --color-text-dim: #665599;
-  --color-success: #39ff14;
-  --color-danger: #ff3366;
+  --color-background: #060e1a;
+  --color-foreground: #e4f0fb;
+  --color-deep-sea: #1565c0;
+  --color-deep-sea-light: #2196f3;
+  --color-ocean-blue: #00a8ff;
+  --color-ocean-blue-dark: #0088cc;
+  --color-coral-red: #ff4757;
+  --color-coral-red-dark: #e8384f;
+  --color-seafoam: #4dd0b8;
+  --color-sandy-gold: #f0b429;
+  --color-sky-blue: #87ceeb;
+  --color-surface: #0c1a2e;
+  --color-surface-light: #132b4a;
+  --color-surface-lighter: #1a3a5e;
+  --color-border: #1e3d6b;
+  --color-text-muted: #6b8db5;
+  --color-text-dim: #4a6d8c;
+  --color-success: #2ed573;
+  --color-danger: #ff4757;
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -29,23 +27,23 @@
 
 body {
   background:
-    radial-gradient(ellipse at 50% 100%, rgba(123, 47, 247, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(21, 101, 192, 0.12) 0%, transparent 60%),
     var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Psychedelic animated gradient background */
+/* Ocean animated gradient background */
 .donut-bg {
   background:
-    radial-gradient(ellipse at 15% 20%, rgba(123, 47, 247, 0.25) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 40%, rgba(255, 0, 128, 0.12) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 60%, rgba(0, 255, 204, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse at 20% 80%, rgba(57, 255, 20, 0.04) 0%, transparent 40%),
-    radial-gradient(ellipse at 80% 100%, rgba(0, 191, 255, 0.08) 0%, transparent 45%),
-    radial-gradient(ellipse at 40% 0%, rgba(123, 47, 247, 0.15) 0%, transparent 40%),
-    radial-gradient(ellipse at 60% 50%, rgba(255, 0, 128, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 30% 100%, rgba(123, 47, 247, 0.18) 0%, transparent 45%);
+    radial-gradient(ellipse at 15% 20%, rgba(21, 101, 192, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 40%, rgba(255, 71, 87, 0.10) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 60%, rgba(0, 168, 255, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(77, 208, 184, 0.04) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 100%, rgba(135, 206, 235, 0.08) 0%, transparent 45%),
+    radial-gradient(ellipse at 40% 0%, rgba(21, 101, 192, 0.15) 0%, transparent 40%),
+    radial-gradient(ellipse at 60% 50%, rgba(255, 71, 87, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 30% 100%, rgba(21, 101, 192, 0.18) 0%, transparent 45%);
   position: relative;
   overflow: hidden;
 }
@@ -55,14 +53,14 @@ body {
   position: fixed;
   inset: -10%;
   background:
-    radial-gradient(ellipse at 30% 70%, rgba(255, 0, 128, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 30%, rgba(0, 255, 204, 0.06) 0%, transparent 50%);
-  animation: psychedelicDrift 20s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 30% 70%, rgba(255, 71, 87, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 30%, rgba(0, 168, 255, 0.06) 0%, transparent 50%);
+  animation: oceanDrift 20s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
 }
 
-@keyframes psychedelicDrift {
+@keyframes oceanDrift {
   0% {
     transform: scale(1) rotate(0deg);
     opacity: 0.6;
@@ -81,48 +79,48 @@ body {
   }
 }
 
-/* Fishman donut pattern — subtle repeating circles */
+/* Bubble pattern — subtle repeating circles */
 .fishman-pattern {
   background-image:
-    radial-gradient(circle, rgba(255, 0, 128, 0.05) 30%, transparent 30%),
-    radial-gradient(circle, rgba(0, 255, 204, 0.03) 30%, transparent 30%);
+    radial-gradient(circle, rgba(0, 168, 255, 0.05) 30%, transparent 30%),
+    radial-gradient(circle, rgba(77, 208, 184, 0.03) 30%, transparent 30%);
   background-size: 32px 32px, 48px 48px;
   background-position: 0 0, 16px 16px;
 }
 
-/* Neon text glow */
+/* Neon text glow — ocean */
 .neon-glow {
   text-shadow:
-    0 0 7px rgba(0, 255, 204, 0.6),
-    0 0 20px rgba(0, 255, 204, 0.3),
-    0 0 40px rgba(123, 47, 247, 0.2);
+    0 0 7px rgba(0, 168, 255, 0.6),
+    0 0 20px rgba(0, 168, 255, 0.3),
+    0 0 40px rgba(21, 101, 192, 0.2);
 }
 
-.neon-glow-pink {
+.neon-glow-coral {
   text-shadow:
-    0 0 7px rgba(255, 0, 128, 0.6),
-    0 0 20px rgba(255, 0, 128, 0.3),
-    0 0 40px rgba(255, 0, 128, 0.15);
+    0 0 7px rgba(255, 71, 87, 0.6),
+    0 0 20px rgba(255, 71, 87, 0.3),
+    0 0 40px rgba(255, 71, 87, 0.15);
 }
 
-/* Psychedelic gradient text */
-.psychedelic-text {
+/* Ocean gradient text */
+.ocean-text {
   background: linear-gradient(
     135deg,
-    #ff0080 0%,
-    #7b2ff7 25%,
-    #00ffcc 50%,
-    #39ff14 75%,
-    #ffaa00 100%
+    #ff4757 0%,
+    #1565c0 25%,
+    #00a8ff 50%,
+    #4dd0b8 75%,
+    #f0b429 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: psychedelicShift 4s ease-in-out infinite alternate;
+  animation: oceanShift 4s ease-in-out infinite alternate;
 }
 
-@keyframes psychedelicShift {
+@keyframes oceanShift {
   0% { background-position: 0% center; }
   100% { background-position: 100% center; }
 }
@@ -173,7 +171,7 @@ body {
   animation: fadeIn 0.4s ease-out forwards;
 }
 
-/* Song card hover effects — psychedelic glow */
+/* Song card hover effects — ocean glow */
 .song-card {
   transition: all 0.25s ease;
   position: relative;
@@ -184,7 +182,7 @@ body {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 0, 128, 0.3), rgba(0, 255, 204, 0.3), rgba(123, 47, 247, 0.3));
+  background: linear-gradient(135deg, rgba(255, 71, 87, 0.3), rgba(0, 168, 255, 0.3), rgba(21, 101, 192, 0.3));
   opacity: 0;
   transition: opacity 0.25s ease;
   z-index: -1;
@@ -194,23 +192,23 @@ body {
 .song-card:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 4px 20px rgba(0, 255, 204, 0.15),
-    0 0 30px rgba(123, 47, 247, 0.1);
+    0 4px 20px rgba(0, 168, 255, 0.15),
+    0 0 30px rgba(21, 101, 192, 0.1);
 }
 
 .song-card:hover::before {
   opacity: 1;
 }
 
-/* Psychedelic border animation for active/selected states */
+/* Ocean border animation for active/selected states */
 @keyframes borderPulse {
   0%, 100% {
-    border-color: rgba(0, 255, 204, 0.5);
-    box-shadow: 0 0 10px rgba(0, 255, 204, 0.15);
+    border-color: rgba(0, 168, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 168, 255, 0.15);
   }
   50% {
-    border-color: rgba(123, 47, 247, 0.5);
-    box-shadow: 0 0 10px rgba(123, 47, 247, 0.15);
+    border-color: rgba(21, 101, 192, 0.5);
+    box-shadow: 0 0 10px rgba(21, 101, 192, 0.15);
   }
 }
 
@@ -228,7 +226,7 @@ body {
   animation: breathe 3s ease-in-out infinite;
 }
 
-/* Custom scrollbar — psychedelic */
+/* Custom scrollbar — ocean */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -238,23 +236,23 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--color-deep-purple), var(--color-hot-pink));
+  background: linear-gradient(180deg, var(--color-deep-sea), var(--color-coral-red));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--color-deep-purple-light), var(--color-hot-pink));
+  background: linear-gradient(180deg, var(--color-deep-sea-light), var(--color-coral-red));
 }
 
-/* Rainbow divider */
-.rainbow-divider {
+/* Wave divider */
+.wave-divider {
   height: 2px;
-  background: linear-gradient(90deg, #ff0080, #7b2ff7, #00ffcc, #39ff14, #ffaa00, #ff0080);
+  background: linear-gradient(90deg, #ff4757, #1565c0, #00a8ff, #4dd0b8, #f0b429, #ff4757);
   background-size: 200% auto;
-  animation: rainbowSlide 3s linear infinite;
+  animation: waveSlide 3s linear infinite;
 }
 
-@keyframes rainbowSlide {
+@keyframes waveSlide {
   0% { background-position: 0% center; }
   100% { background-position: 200% center; }
 }

@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #0a0a1a;
+  --color-foreground: #e8e8f0;
+  --color-deep-purple: #2d1b69;
+  --color-deep-purple-light: #3d2b89;
+  --color-electric-teal: #00d4aa;
+  --color-electric-teal-dark: #00b892;
+  --color-warm-orange: #ff6b35;
+  --color-warm-orange-dark: #e55a2b;
+  --color-surface: #12122a;
+  --color-surface-light: #1a1a3a;
+  --color-surface-lighter: #22224a;
+  --color-border: #2a2a4a;
+  --color-text-muted: #8888aa;
+  --color-text-dim: #666688;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Donut pattern background */
+.donut-bg {
+  background-image: radial-gradient(circle at 20% 50%, rgba(45, 27, 105, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 212, 170, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 60% 80%, rgba(255, 107, 53, 0.06) 0%, transparent 40%);
+}
+
+/* Fishman donut pattern using repeating shapes */
+.fishman-pattern {
+  background-image: radial-gradient(circle, rgba(255, 107, 53, 0.06) 30%, transparent 30%);
+  background-size: 32px 32px;
+}
+
+/* Animated score reveal */
+@keyframes scoreReveal {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.score-reveal {
+  animation: scoreReveal 0.5s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Song card hover effects */
+.song-card {
+  transition: all 0.2s ease;
+}
+
+.song-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 212, 170, 0.15);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}

@@ -81,6 +81,7 @@ src/
 supabase/
   migrations/
     001_initial_schema.sql     # Full DB schema, triggers, indexes, RLS policies
+    002_security_hardening.sql  # Security fixes, views, composite indexes, CHECK constraints
 ```
 
 ## Database Schema
@@ -134,14 +135,30 @@ Auto-created via a database trigger when a user signs up through Supabase Auth.
 | created_at | TIMESTAMPTZ | |
 | updated_at | TIMESTAMPTZ | |
 
+### Database Views
+
+Pre-aggregated views for efficient leaderboard and stats queries:
+
+| View | Purpose |
+|------|---------|
+| `leaderboard_stats` | Global leaderboard: user stats aggregated from scored drafts |
+| `league_leaderboard_stats` | Per-league leaderboard stats |
+| `draft_counts_by_show` | Number of drafts per show (replaces full table scan) |
+
 ### RLS Policies
 
 All tables are publicly **readable** (SELECT). Write operations are restricted:
 
-- **profiles**: Users can only UPDATE their own row
+- **profiles**: Users can UPDATE or DELETE their own row
 - **leagues**: Only the creator can UPDATE/DELETE; any auth user can INSERT (with their own ID)
 - **league_members**: Users can INSERT/DELETE only their own membership
 - **drafts**: Users can INSERT/UPDATE/DELETE only their own drafts
+
+### Constraints
+
+- `profiles.display_name`: max 40 characters
+- `leagues.name`: max 50 characters
+- `leagues.description`: max 200 characters (nullable)
 
 ### Entity Relationships
 
@@ -176,7 +193,10 @@ Song and show data live in TypeScript files (`src/data/`). This data is bundled 
 All user-generated data flows through Supabase. The library files (`storage.ts`, `leagues.ts`) handle:
 - DB field mapping (snake_case DB columns to camelCase TypeScript)
 - Profile joins (drafts and league_members select associated profile data)
-- Aggregation (leaderboard computation groups drafts by user)
+- Leaderboard aggregation via Postgres views (`leaderboard_stats`, `league_leaderboard_stats`)
+- Pagination support (configurable limit/offset, defaults prevent PostgREST 1000-row truncation)
+- Avatar URL sanitization (HTTPS-only, allowlisted OAuth provider domains)
+- Error logging on all database operations
 
 ## Scoring Engine
 

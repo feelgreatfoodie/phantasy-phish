@@ -45,7 +45,8 @@ export default function LeaguesPage() {
   }
 
   async function handleCreate() {
-    if (!user || !newName.trim()) return;
+    const trimmedName = newName.trim();
+    if (!user || !trimmedName || trimmedName.length > 50) return;
     setCreating(true);
     const league = await createLeague({
       name: newName.trim(),

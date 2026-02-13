@@ -109,7 +109,7 @@ export function LeaderboardDisplay({
                     <span className="font-medium text-sm">
                       {entry.displayName}
                     </span>
-                    {showDraftCount && (
+                    {showDraftCount && entry.drafts.length > 0 && (
                       <div className="text-[10px] sm:text-xs text-text-muted mt-0.5">
                         {entry.drafts.length} draft
                         {entry.drafts.length !== 1 ? "s" : ""}
@@ -137,8 +137,8 @@ export function LeaderboardDisplay({
         </div>
       </div>
 
-      {/* Show Breakdown */}
-      <div>
+      {/* Show Breakdown — only render if drafts are loaded */}
+      {entries.some((e) => e.drafts.length > 0) && <div>
         <h2 className="text-xl font-bold mb-4">Show Breakdown</h2>
         <div className="space-y-3">
           {entries.map((entry) => (
@@ -178,7 +178,7 @@ export function LeaderboardDisplay({
             </div>
           ))}
         </div>
-      </div>
+      </div>}
     </>
   );
 }

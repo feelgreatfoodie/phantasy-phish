@@ -22,6 +22,7 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 - [x] Phase 4: Profile page (stats, draft history, leagues, protected route)
 - [x] Phase 5: Settings & mobile UX (hamburger menu, settings page, help, delete account)
 - [x] Phase 6: Icon nav & UX cleanup (icon nav, inline profile name editing, sign out on profile)
+- [x] Phase 7: Security & scalability hardening (security headers, open redirect fix, error boundaries, Postgres views, CI/CD, privacy policy)
 
 ## Commit Conventions
 
@@ -51,8 +52,12 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 | `src/lib/supabase/server.ts` | Server Supabase client (`createServerClient`) |
 | `src/lib/supabase/middleware.ts` | Session refresh + protected route redirects |
 | `src/components/AuthProvider.tsx` | Auth context: user, profile, loading, signOut |
-| `src/middleware.ts` | Next.js middleware entry point |
+| `src/lib/utils.ts` | Formatting helpers, avatar URL sanitization |
+| `src/middleware.ts` | Next.js middleware entry point (protected routes only) |
 | `supabase/migrations/001_initial_schema.sql` | Full DB schema |
+| `supabase/migrations/002_security_hardening.sql` | Security fixes, views, indexes, constraints |
+| `next.config.ts` | Security headers (HSTS, X-Frame-Options, etc.) |
+| `.github/workflows/ci.yml` | CI pipeline: lint, type-check, build |
 
 ### Pages
 
@@ -70,7 +75,8 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 | `/leagues` | `src/app/leagues/page.tsx` | Leagues hub (list, create, join) |
 | `/leagues/[id]` | `src/app/leagues/[id]/page.tsx` | League detail (members, leaderboard) |
 | `/profile` | `src/app/profile/page.tsx` | User profile (inline name editing, stats, drafts, leagues, sign out) |
-| `/settings` | `src/app/settings/page.tsx` | Settings (help, scoring, bug report, feature request, about, delete account) |
+| `/settings` | `src/app/settings/page.tsx` | Settings (help, scoring, bug report, feature request, privacy policy, about, delete account) |
+| `/privacy` | `src/app/privacy/page.tsx` | Privacy policy |
 
 ## Database Schema
 
@@ -80,6 +86,9 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 - **league_members** — league_id, user_id, role (owner/member)
 
 All tables have RLS: publicly readable, writes restricted to authenticated owner.
+
+**Views:** `leaderboard_stats`, `league_leaderboard_stats`, `draft_counts_by_show`
+**Constraints:** display_name <= 40 chars, league name <= 50 chars, description <= 200 chars
 
 ## Auth Flow
 

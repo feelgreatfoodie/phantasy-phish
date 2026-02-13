@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/client";
 import { Draft, LeaderboardEntry, SongScore } from "./types";
+import { sanitizeAvatarUrl } from "./utils";
 
 interface DbDraft {
   id: string;
@@ -21,7 +22,7 @@ function mapDbDraft(row: DbDraft): Draft {
     id: row.id,
     userId: row.user_id,
     displayName: row.profiles?.display_name || "Unknown",
-    avatarUrl: row.profiles?.avatar_url || null,
+    avatarUrl: sanitizeAvatarUrl(row.profiles?.avatar_url),
     showId: row.show_id,
     songIds: row.song_ids || [],
     createdAt: row.created_at,
@@ -35,15 +36,22 @@ function mapDbDraft(row: DbDraft): Draft {
 
 const DRAFT_SELECT = "*, profiles(display_name, avatar_url)";
 
-export async function getDrafts(userId?: string): Promise<Draft[]> {
+export async function getDrafts(
+  userId?: string,
+  options?: { limit?: number; offset?: number }
+): Promise<Draft[]> {
   const supabase = createClient();
+  const limit = options?.limit ?? 100;
+  const offset = options?.offset ?? 0;
   let query = supabase
     .from("drafts")
     .select(DRAFT_SELECT)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
   if (userId) query = query.eq("user_id", userId);
   const { data, error } = await query;
-  if (error || !data) return [];
+  if (error) { console.error("getDrafts error:", error.message); return []; }
+  if (!data) return [];
   return (data as unknown as DbDraft[]).map(mapDbDraft);
 }
 
@@ -64,7 +72,8 @@ export async function createDraft(data: {
     })
     .select(DRAFT_SELECT)
     .single();
-  if (error || !row) return null;
+  if (error) { console.error("createDraft error:", error.message); return null; }
+  if (!row) return null;
   return mapDbDraft(row as unknown as DbDraft);
 }
 
@@ -79,7 +88,8 @@ export async function updateDraft(
   if (updates.scored !== undefined) dbUpdates.scored = updates.scored;
   if (updates.totalScore !== undefined) dbUpdates.total_score = updates.totalScore;
   if (updates.songScores !== undefined) dbUpdates.song_scores = updates.songScores;
-  await supabase.from("drafts").update(dbUpdates).eq("id", id);
+  const { error } = await supabase.from("drafts").update(dbUpdates).eq("id", id);
+  if (error) console.error("updateDraft error:", error.message);
 }
 
 export async function getDraftById(id: string): Promise<Draft | null> {
@@ -89,29 +99,36 @@ export async function getDraftById(id: string): Promise<Draft | null> {
     .select(DRAFT_SELECT)
     .eq("id", id)
     .single();
-  if (error || !data) return null;
+  if (error) { console.error("getDraftById error:", error.message); return null; }
+  if (!data) return null;
   return mapDbDraft(data as unknown as DbDraft);
 }
 
 export async function getDraftsByShow(
   showId: string,
-  leagueId?: string
+  leagueId?: string,
+  options?: { limit?: number; offset?: number }
 ): Promise<Draft[]> {
   const supabase = createClient();
+  const limit = options?.limit ?? 200;
+  const offset = options?.offset ?? 0;
   let query = supabase
     .from("drafts")
     .select(DRAFT_SELECT)
-    .eq("show_id", showId);
+    .eq("show_id", showId)
+    .range(offset, offset + limit - 1);
   if (leagueId) query = query.eq("league_id", leagueId);
   const { data, error } = await query;
-  if (error || !data) return [];
+  if (error) { console.error("getDraftsByShow error:", error.message); return []; }
+  if (!data) return [];
   return (data as unknown as DbDraft[]).map(mapDbDraft);
 }
 
 export async function getDraftCountsByShow(): Promise<Record<string, number>> {
   const supabase = createClient();
   const { data, error } = await supabase.from("drafts").select("show_id");
-  if (error || !data) return {};
+  if (error) { console.error("getDraftCountsByShow error:", error.message); return {}; }
+  if (!data) return {};
   const counts: Record<string, number> = {};
   (data as { show_id: string }[]).forEach((row) => {
     counts[row.show_id] = (counts[row.show_id] || 0) + 1;
@@ -121,7 +138,8 @@ export async function getDraftCountsByShow(): Promise<Record<string, number>> {
 
 export async function deleteDraft(id: string): Promise<void> {
   const supabase = createClient();
-  await supabase.from("drafts").delete().eq("id", id);
+  const { error } = await supabase.from("drafts").delete().eq("id", id);
+  if (error) console.error("deleteDraft error:", error.message);
 }
 
 export async function getDraftByShareCode(code: string): Promise<Draft | null> {
@@ -131,16 +149,56 @@ export async function getDraftByShareCode(code: string): Promise<Draft | null> {
     .select(DRAFT_SELECT)
     .eq("share_code", code)
     .single();
-  if (error || !data) return null;
+  if (error) { console.error("getDraftByShareCode error:", error.message); return null; }
+  if (!data) return null;
   return mapDbDraft(data as unknown as DbDraft);
 }
 
-export async function getLeaderboard(leagueId?: string): Promise<LeaderboardEntry[]> {
+/** Lightweight leaderboard stats from Postgres view (no draft details) */
+export async function getLeaderboardStats(leagueId?: string): Promise<LeaderboardEntry[]> {
   const supabase = createClient();
-  let query = supabase.from("drafts").select(DRAFT_SELECT);
+  const view = leagueId ? "league_leaderboard_stats" : "leaderboard_stats";
+  let query = supabase.from(view).select("*");
   if (leagueId) query = query.eq("league_id", leagueId);
   const { data, error } = await query;
-  if (error || !data) return [];
+
+  if (error) {
+    console.error("getLeaderboardStats error:", error.message);
+    // Fallback to client-side aggregation if view doesn't exist yet
+    return getLeaderboard(leagueId);
+  }
+  if (!data || data.length === 0) return [];
+
+  return (data as Array<{
+    user_id: string;
+    display_name: string;
+    avatar_url: string | null;
+    shows_played: number;
+    total_points: number;
+    best_show: number;
+    avg_points_per_show: number;
+  }>)
+    .map((row) => ({
+      userId: row.user_id,
+      displayName: row.display_name,
+      avatarUrl: sanitizeAvatarUrl(row.avatar_url),
+      totalPoints: Number(row.total_points),
+      showsPlayed: Number(row.shows_played),
+      avgPointsPerShow: Number(row.avg_points_per_show),
+      bestShow: Number(row.best_show),
+      drafts: [],
+    }))
+    .sort((a, b) => b.totalPoints - a.totalPoints);
+}
+
+/** Full leaderboard with per-user draft breakdown (for detail pages) */
+export async function getLeaderboard(leagueId?: string): Promise<LeaderboardEntry[]> {
+  const supabase = createClient();
+  let query = supabase.from("drafts").select(DRAFT_SELECT).eq("scored", true);
+  if (leagueId) query = query.eq("league_id", leagueId);
+  const { data, error } = await query;
+  if (error) { console.error("getLeaderboard error:", error.message); return []; }
+  if (!data) return [];
 
   const drafts = (data as unknown as DbDraft[]).map(mapDbDraft);
   const userMap = new Map<string, Draft[]>();
@@ -153,12 +211,11 @@ export async function getLeaderboard(leagueId?: string): Promise<LeaderboardEntr
 
   const entries: LeaderboardEntry[] = [];
   userMap.forEach((userDrafts, userId) => {
-    const scoredDrafts = userDrafts.filter((d) => d.scored);
-    const totalPoints = scoredDrafts.reduce((sum, d) => sum + d.totalScore, 0);
-    const showsPlayed = scoredDrafts.length;
+    const totalPoints = userDrafts.reduce((sum, d) => sum + d.totalScore, 0);
+    const showsPlayed = userDrafts.length;
     const bestShow =
-      scoredDrafts.length > 0
-        ? Math.max(...scoredDrafts.map((d) => d.totalScore))
+      showsPlayed > 0
+        ? Math.max(...userDrafts.map((d) => d.totalScore))
         : 0;
     const first = userDrafts[0];
 
@@ -176,4 +233,21 @@ export async function getLeaderboard(leagueId?: string): Promise<LeaderboardEntr
 
   entries.sort((a, b) => b.totalPoints - a.totalPoints);
   return entries;
+}
+
+/** Draft counts by show from Postgres view */
+export async function getDraftCountsByShowOptimized(): Promise<Record<string, number>> {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("draft_counts_by_show").select("*");
+  if (error) {
+    console.error("getDraftCountsByShowOptimized error:", error.message);
+    // Fallback to original function if view doesn't exist
+    return getDraftCountsByShow();
+  }
+  if (!data) return {};
+  const counts: Record<string, number> = {};
+  (data as Array<{ show_id: string; draft_count: number }>).forEach((row) => {
+    counts[row.show_id] = Number(row.draft_count);
+  });
+  return counts;
 }

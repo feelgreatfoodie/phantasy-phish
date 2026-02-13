@@ -49,18 +49,39 @@
 - Sign Out moved to profile page (discreet text link)
 - Settings page simplified: removed profile section and sign out button
 
+### Phase 7: Security & Scalability Hardening
+- Fixed open redirect vulnerability in auth callback (allowlist validation)
+- Added security headers (X-Frame-Options, HSTS, CSP, nosniff, Referrer-Policy)
+- Fixed incomplete account deletion (now deletes profile row)
+- Added error boundaries (error.tsx, not-found.tsx)
+- Added input validation for display names and league names (client + DB constraints)
+- Added error logging to all storage and league library functions
+- Narrowed middleware to only run on protected routes
+- Fixed SECURITY DEFINER search_path in database trigger
+- Added avatar URL sanitization (HTTPS-only, allowlisted OAuth providers)
+- Moved leaderboard aggregation to Postgres views (leaderboard_stats, league_leaderboard_stats, draft_counts_by_show)
+- Added pagination to getDrafts and getDraftsByShow
+- Added CI/CD pipeline (GitHub Actions: lint, type-check, build)
+- Added composite database indexes for common query patterns
+- Optimized getMyLeagues from 3 sequential queries to 2 (join-based)
+- Added privacy policy page (/privacy) with consent text on login
+- Added tighter RLS policies and DB CHECK constraints via migration
+
 ## Current State
 
-All six phases are complete. The app is fully functional with:
+All seven phases are complete. The app is fully functional with:
 - Song drafting for upcoming and past shows
 - Automated scoring against real setlists
-- Global and league-scoped leaderboards
+- Global and league-scoped leaderboards (Postgres view-backed)
 - League creation, joining via invite code, and member management
 - User profiles with inline name editing, stats, and draft history
 - Auth via Google and email magic links
 - Icon-based navigation with tooltips (desktop) and icon + label (mobile)
-- Settings page with help, info, and account management
+- Settings page with help, info, privacy policy, and account management
 - Mobile-optimized hamburger menu navigation
+- Security headers, input validation, error boundaries
+- CI/CD pipeline with GitHub Actions
+- Privacy policy page with consent on login
 
 ## Future Ideas
 
@@ -86,3 +107,11 @@ These are potential enhancements — not committed work. Ordered roughly by impa
 - **Advanced stats**: Win rate, song pick accuracy, most/least picked songs
 - **Trade/auction draft mode**: Leagues with timed picks where members take turns
 - **Achievements/badges**: Milestones like "called 10+ songs in one show" or "predicted a bust-out"
+
+### Infrastructure (scaffold for later)
+- **Rate limiting**: Edge middleware or API gateway for abuse prevention
+- **Error tracking**: Sentry or similar for production error monitoring
+- **Caching layer**: Redis or CDN for hot data (leaderboard, song catalog)
+- **Staging environment**: Separate Vercel project for pre-production testing
+- **Audit logging**: Track sensitive operations (account deletion, league changes)
+- **Data export**: GDPR-compliant user data export endpoint

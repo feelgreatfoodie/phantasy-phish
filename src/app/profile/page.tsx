@@ -43,7 +43,8 @@ export default function ProfilePage() {
   }
 
   async function handleSaveName() {
-    if (!user || !displayName.trim()) return;
+    const trimmed = displayName.trim();
+    if (!user || !trimmed || trimmed.length > 40) return;
     setNameSaving(true);
     const supabase = createClient();
     await supabase

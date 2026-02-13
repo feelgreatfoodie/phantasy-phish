@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { shows, getUpcomingShows, getCompletedShows } from "@/data/shows";
 import { songs } from "@/data/songs";
-import { getDrafts, getLeaderboard } from "@/lib/storage";
+import { getDrafts, getLeaderboardStats } from "@/lib/storage";
 import { ShowCard } from "@/components/ShowCard";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
@@ -19,7 +19,7 @@ export default function HomePage() {
     async function load() {
       const [d, lb] = await Promise.all([
         user ? getDrafts(user.id) : Promise.resolve([]),
-        getLeaderboard(),
+        getLeaderboardStats(),
       ]);
       setDrafts(d);
       setLeaderboard(lb);

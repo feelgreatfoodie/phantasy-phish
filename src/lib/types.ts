@@ -34,6 +34,7 @@ export interface LeaderboardEntry {
   avgPointsPerShow: number;
   bestShow: number;
   drafts: Draft[];
+  totalDrafts?: number;
 }
 
 export interface League {

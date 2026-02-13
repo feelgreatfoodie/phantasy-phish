@@ -123,10 +123,14 @@ function LoginForm() {
         <p className="text-danger text-sm text-center">{error}</p>
       )}
 
-      <div className="text-center">
-        <Link href="/" className="text-text-muted text-sm hover:text-foreground transition-colors">
+      <div className="text-center space-y-2">
+        <Link href="/" className="text-text-muted text-sm hover:text-foreground transition-colors block">
           Back to home
         </Link>
+        <p className="text-text-dim text-xs">
+          By signing in, you agree to our{" "}
+          <Link href="/privacy" className="text-ocean-blue hover:underline">Privacy Policy</Link>
+        </p>
       </div>
     </div>
   );

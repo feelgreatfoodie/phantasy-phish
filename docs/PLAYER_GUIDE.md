@@ -111,8 +111,9 @@ Access settings from the gear icon in the nav (desktop) or the hamburger menu (m
 - **Scoring Rules** — quick reference table of all point values
 - **Report a Bug** — opens a GitHub issue on the project repo
 - **Request a Feature** — suggest improvements via a GitHub issue
+- **Privacy Policy** — what data is collected, how it's used, your rights
 - **About** — app version, source code link, tech stack
-- **Delete Account** — permanently remove all your drafts and league memberships
+- **Delete Account** — permanently remove all your drafts, league memberships, and profile data
 
 ## Sharing Drafts
 

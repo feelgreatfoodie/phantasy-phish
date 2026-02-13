@@ -40,6 +40,9 @@ export default function SettingsPage() {
     // Remove from all leagues
     await supabase.from("league_members").delete().eq("user_id", user.id);
 
+    // Delete profile row (clears PII from our DB even though auth.users persists)
+    await supabase.from("profiles").delete().eq("id", user.id);
+
     // Sign out — auth state change will redirect via AuthProvider
     await signOut();
   }
@@ -192,6 +195,17 @@ export default function SettingsPage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
         </a>
+
+        {/* Privacy Policy */}
+        <Link
+          href="/privacy"
+          className="flex items-center justify-between px-4 sm:px-6 py-4 text-sm font-medium text-text-muted hover:text-foreground hover:bg-surface-light transition-colors border-b border-border"
+        >
+          <span>Privacy Policy</span>
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
 
         {/* About */}
         <div className="px-4 sm:px-6 py-4">

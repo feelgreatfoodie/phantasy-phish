@@ -2,7 +2,7 @@
 
 import { getUpcomingShows, getCompletedShows } from "@/data/shows";
 import { ShowCard } from "@/components/ShowCard";
-import { getDraftCountsByShow } from "@/lib/storage";
+import { getDraftCountsByShowOptimized } from "@/lib/storage";
 import { useEffect, useState } from "react";
 
 export default function ShowsPage() {
@@ -11,7 +11,7 @@ export default function ShowsPage() {
   const [draftCounts, setDraftCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    getDraftCountsByShow().then(setDraftCounts);
+    getDraftCountsByShowOptimized().then(setDraftCounts);
   }, []);
 
   return (

@@ -31,21 +31,23 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 Find these values in your Supabase dashboard under **Settings > API**.
 
-### 3. Run Database Migration
+### 3. Run Database Migrations
 
-Open the **SQL Editor** in your Supabase dashboard and paste the contents of:
+Open the **SQL Editor** in your Supabase dashboard and run these migrations in order:
 
-```
-supabase/migrations/001_initial_schema.sql
-```
-
-This creates all tables (profiles, drafts, leagues, league_members), triggers, indexes, and RLS policies.
+1. **`supabase/migrations/001_initial_schema.sql`** — Creates all tables (profiles, drafts, leagues, league_members), triggers, indexes, and RLS policies.
+2. **`supabase/migrations/002_security_hardening.sql`** — Adds CHECK constraints, composite indexes, Postgres views (leaderboard_stats, league_leaderboard_stats, draft_counts_by_show), and profile DELETE policy.
 
 ### 4. Configure Auth Providers
 
-In your Supabase dashboard under **Authentication > Providers**:
+In your Supabase dashboard under **Auth > URL Configuration**:
 
-- **Google OAuth**: Enable and add your Google OAuth client ID and secret. Set the redirect URL to `http://localhost:3000/auth/callback` for local dev.
+- **Site URL**: Set to your production URL (e.g., `https://phantasy-phish.vercel.app`)
+- **Redirect URLs**: Add both `http://localhost:3000/auth/callback` and `https://your-production-domain.vercel.app/auth/callback`
+
+Under **Auth > Providers**:
+
+- **Google OAuth**: Enable and add your Google OAuth client ID and secret.
 - **Email (magic link)**: Enabled by default. Emails will be sent via Supabase's built-in email service.
 
 ### 5. Start Dev Server
@@ -213,14 +215,21 @@ Song IDs must match entries in `src/data/songs.ts`.
 
 ## Deployment
 
-The app auto-deploys to Vercel on push to the `master` branch. The Vercel project has the same environment variables configured:
+The app auto-deploys to Vercel on push to the `master` branch. A GitHub Actions CI pipeline (`.github/workflows/ci.yml`) runs lint, type-check, and build on every push and PR.
+
+### Vercel Environment Variables
+
+These **must** be set in the Vercel project settings (Settings > Environment Variables) for both Production and Preview:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-For manual deployment:
+The Supabase client files use fallback placeholder values so the build doesn't crash during static prerendering, but the app won't function without real values at runtime.
+
+### Deploy Steps
 
 ```bash
+npm run lint     # Ensure no ESLint errors (warnings are OK)
 npm run build    # Verify build succeeds locally
 git push         # Triggers Vercel auto-deploy
 ```

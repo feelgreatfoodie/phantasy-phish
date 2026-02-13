@@ -53,6 +53,8 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 | `src/lib/supabase/middleware.ts` | Session refresh + protected route redirects |
 | `src/components/AuthProvider.tsx` | Auth context: user, profile, loading, signOut |
 | `src/lib/utils.ts` | Formatting helpers, avatar URL sanitization |
+| `src/app/error.tsx` | Error boundary (reset button) |
+| `src/app/not-found.tsx` | Custom 404 page |
 | `src/middleware.ts` | Next.js middleware entry point (protected routes only) |
 | `supabase/migrations/001_initial_schema.sql` | Full DB schema |
 | `supabase/migrations/002_security_hardening.sql` | Security fixes, views, indexes, constraints |
@@ -111,3 +113,5 @@ All tables have RLS: publicly readable, writes restricted to authenticated owner
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
+
+Must be set in both `.env.local` (local dev) and Vercel project settings (production/preview). Supabase clients use placeholder fallbacks at build time to prevent crashes during static prerendering.

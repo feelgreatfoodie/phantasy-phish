@@ -244,6 +244,35 @@ body {
   background: linear-gradient(180deg, var(--color-deep-sea-light), var(--color-coral-red));
 }
 
+/* Fishman donut ring — rotating muumuu pattern around avatar */
+.donut-ring {
+  position: relative;
+  padding: 3px;
+  border-radius: 9999px;
+  display: inline-flex;
+}
+
+.donut-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background-color: #6B9FD4;
+  background-image: radial-gradient(circle, #D94F3B 1.5px, transparent 1.5px);
+  background-size: 6px 6px;
+  animation: donutSpin 30s linear infinite;
+  z-index: 0;
+}
+
+.donut-ring > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes donutSpin {
+  to { transform: rotate(360deg); }
+}
+
 /* Wave divider */
 .wave-divider {
   height: 2px;

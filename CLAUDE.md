@@ -18,8 +18,9 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 
 - [x] Phase 1: Auth Foundation (Supabase client/server, middleware, AuthProvider, login page)
 - [x] Phase 2: Draft Migration (localStorage → Supabase Postgres, all pages updated)
-- [ ] Phase 3: League System (types + lib done, UI pages not yet built)
-- [ ] Phase 4: Profile page + polish
+- [x] Phase 3: League System (types, lib, leagues hub, league detail with leaderboard)
+- [x] Phase 4: Profile page (stats, draft history, leagues, protected route)
+- [x] Phase 5: Settings & mobile UX (hamburger menu, settings page, edit name, help, delete account)
 
 ## Commit Conventions
 
@@ -52,6 +53,24 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 | `src/middleware.ts` | Next.js middleware entry point |
 | `supabase/migrations/001_initial_schema.sql` | Full DB schema |
 
+### Pages
+
+| Route | File | Purpose |
+|-------|------|---------|
+| `/` | `src/app/page.tsx` | Home — hero, stats, scoring rules, shows, leaderboard preview |
+| `/login` | `src/app/login/page.tsx` | Auth (Google, email magic link) |
+| `/draft` | `src/app/draft/page.tsx` | Song drafting interface |
+| `/draft/[id]` | `src/app/draft/[id]/page.tsx` | Draft detail / results |
+| `/draft/share/[code]` | `src/app/draft/share/[code]/page.tsx` | Public shared draft |
+| `/shows` | `src/app/shows/page.tsx` | Shows listing |
+| `/shows/[id]` | `src/app/shows/[id]/page.tsx` | Show detail with setlist |
+| `/songs` | `src/app/songs/page.tsx` | Full song catalog |
+| `/leaderboard` | `src/app/leaderboard/page.tsx` | Global rankings |
+| `/leagues` | `src/app/leagues/page.tsx` | Leagues hub (list, create, join) |
+| `/leagues/[id]` | `src/app/leagues/[id]/page.tsx` | League detail (members, leaderboard) |
+| `/profile` | `src/app/profile/page.tsx` | User profile (stats, drafts, leagues) |
+| `/settings` | `src/app/settings/page.tsx` | Settings (edit name, help, scoring, bug report, feature request, about, delete account) |
+
 ## Database Schema
 
 - **profiles** — auto-created via trigger on auth.users insert
@@ -67,7 +86,14 @@ All tables have RLS: publicly readable, writes restricted to authenticated owner
 2. Supabase handles OAuth/magic link redirect
 3. `/auth/callback` exchanges code for session
 4. `AuthProvider` fetches profile from `profiles` table
-5. Middleware protects `/draft` and `/leagues` routes (redirects to `/login`)
+5. Middleware protects `/draft`, `/leagues`, `/profile`, and `/settings` routes (redirects to `/login`)
+
+## Documentation
+
+- `docs/ARCHITECTURE.md` — System design, DB schema, auth flow, styling system
+- `docs/ROADMAP.md` — Completed phases, current state, future ideas
+- `docs/PLAYER_GUIDE.md` — End-user guide (signing up, drafting, scoring, leagues)
+- `docs/DEVELOPER_GUIDE.md` — Dev setup, project structure, key patterns, deployment
 
 ## Environment Variables
 

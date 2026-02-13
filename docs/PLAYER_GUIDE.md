@@ -97,23 +97,21 @@ On the league detail page, click **Leave** to remove yourself. League owners can
 ## Profile
 
 Your **profile page** shows:
-- Your display name and avatar
+- Your display name and avatar — click the pencil icon next to your name to edit it inline
 - Stats: total drafts, total points, shows scored, best single-show score
 - Your leagues with quick links
 - Your recent drafts with scores (or "Pending" if the show hasn't been scored yet)
-- A link to **Settings** for managing your account
+- **Sign Out** link at the bottom of the page
 
 ## Settings
 
 Access settings from the gear icon in the nav (desktop) or the hamburger menu (mobile). From here you can:
 
-- **Edit your display name** — change how you appear on leaderboards and in leagues
 - **How to Play** — expandable in-app guide covering drafting, scoring, and creating/joining leagues
 - **Scoring Rules** — quick reference table of all point values
 - **Report a Bug** — opens a GitHub issue on the project repo
 - **Request a Feature** — suggest improvements via a GitHub issue
 - **About** — app version, source code link, tech stack
-- **Sign Out** — end your current session
 - **Delete Account** — permanently remove all your drafts and league memberships
 
 ## Sharing Drafts

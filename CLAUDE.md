@@ -20,7 +20,8 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 - [x] Phase 2: Draft Migration (localStorage → Supabase Postgres, all pages updated)
 - [x] Phase 3: League System (types, lib, leagues hub, league detail with leaderboard)
 - [x] Phase 4: Profile page (stats, draft history, leagues, protected route)
-- [x] Phase 5: Settings & mobile UX (hamburger menu, settings page, edit name, help, delete account)
+- [x] Phase 5: Settings & mobile UX (hamburger menu, settings page, help, delete account)
+- [x] Phase 6: Icon nav & UX cleanup (icon nav, inline profile name editing, sign out on profile)
 
 ## Commit Conventions
 
@@ -68,8 +69,8 @@ Fantasy sports-style web app for Phish concert setlists. Users draft 15 songs pe
 | `/leaderboard` | `src/app/leaderboard/page.tsx` | Global rankings |
 | `/leagues` | `src/app/leagues/page.tsx` | Leagues hub (list, create, join) |
 | `/leagues/[id]` | `src/app/leagues/[id]/page.tsx` | League detail (members, leaderboard) |
-| `/profile` | `src/app/profile/page.tsx` | User profile (stats, drafts, leagues) |
-| `/settings` | `src/app/settings/page.tsx` | Settings (edit name, help, scoring, bug report, feature request, about, delete account) |
+| `/profile` | `src/app/profile/page.tsx` | User profile (inline name editing, stats, drafts, leagues, sign out) |
+| `/settings` | `src/app/settings/page.tsx` | Settings (help, scoring, bug report, feature request, about, delete account) |
 
 ## Database Schema
 

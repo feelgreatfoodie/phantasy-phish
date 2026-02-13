@@ -33,26 +33,33 @@
 
 ### Phase 5: Settings & Mobile UX
 - Mobile hamburger menu (replaces horizontal link row with dropdown overlay)
-- Settings page accessible from nav and profile
-- Edit display name with save
+- Settings page accessible from nav gear icon
 - How to Play expandable guide
 - Scoring Rules expandable reference table
 - Report a Bug link (opens GitHub issue)
 - Request a Feature link (opens GitHub issue)
 - About section (version, source, tech stack)
-- Sign Out (moved from nav to settings)
 - Delete Account with confirmation (clears drafts, league memberships, signs out)
+
+### Phase 6: Icon Nav & UX Cleanup
+- Icon-based navigation (grid, calendar, note, people, trophy, gear) with tooltips on desktop
+- Mobile hamburger shows icon + label for each nav item
+- Settings gear icon in nav (logged-in only), divider before avatar
+- Inline display name editing on profile page (pencil icon toggle)
+- Sign Out moved to profile page (discreet text link)
+- Settings page simplified: removed profile section and sign out button
 
 ## Current State
 
-All five core phases are complete. The app is fully functional with:
+All six phases are complete. The app is fully functional with:
 - Song drafting for upcoming and past shows
 - Automated scoring against real setlists
 - Global and league-scoped leaderboards
 - League creation, joining via invite code, and member management
-- User profiles with stats and draft history
+- User profiles with inline name editing, stats, and draft history
 - Auth via Google and email magic links
-- Settings page with profile editing, help, and account management
+- Icon-based navigation with tooltips (desktop) and icon + label (mobile)
+- Settings page with help, info, and account management
 - Mobile-optimized hamburger menu navigation
 
 ## Future Ideas
@@ -63,7 +70,7 @@ These are potential enhancements — not committed work. Ordered roughly by impa
 - **League drafts**: Associate a draft with a specific league when creating it (show league selector on draft page)
 - **Draft editing**: Allow editing a draft before the show starts
 - **Draft deletion**: Allow users to delete their own drafts
-- **Profile editing**: Let users update their display name and avatar
+- **Avatar editing**: Let users update their avatar
 - **Show notifications**: Alert users when a new show's setlist is available for scoring
 
 ### Medium-term

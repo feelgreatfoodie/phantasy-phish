@@ -52,12 +52,12 @@ src/
     leagues/
       page.tsx                 # Leagues hub — my leagues, create, join via invite code
       [id]/page.tsx            # League detail — members, invite code, league leaderboard
-    profile/page.tsx           # User profile — stats, drafts, leagues
-    settings/page.tsx          # Settings — edit name, help, scoring, bug report, feature request, about, delete
+    profile/page.tsx           # User profile — stats, inline name editing, drafts, leagues, sign out
+    settings/page.tsx          # Settings — help, scoring, bug report, feature request, about, delete account
 
   components/
     AuthProvider.tsx            # React context: user, profile, loading, signOut
-    Navigation.tsx              # Sticky nav with frosted glass, auth state, mobile hamburger menu
+    Navigation.tsx              # Sticky icon nav with frosted glass, auth state, mobile hamburger menu
     SongCard.tsx                # Song display card (selected/scored/disabled states)
     ShowCard.tsx                # Show display card (venue, date, status badge)
 

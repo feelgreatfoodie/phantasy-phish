@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
+import { createClient } from "@/lib/supabase/client";
 import { getDrafts } from "@/lib/storage";
 import { getMyLeagues } from "@/lib/leagues";
 import { Draft, League } from "@/lib/types";
@@ -10,10 +11,20 @@ import { shows } from "@/data/shows";
 import { formatDate, cn } from "@/lib/utils";
 
 export default function ProfilePage() {
-  const { user, profile, loading } = useAuth();
+  const { user, profile, loading, signOut } = useAuth();
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [leagues, setLeagues] = useState<League[]>([]);
   const [mounted, setMounted] = useState(false);
+
+  // Name editing
+  const [editing, setEditing] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [nameSaving, setNameSaving] = useState(false);
+  const [nameSaved, setNameSaved] = useState(false);
+
+  useEffect(() => {
+    if (profile?.display_name) setDisplayName(profile.display_name);
+  }, [profile?.display_name]);
 
   useEffect(() => {
     if (loading || !user) return;
@@ -29,6 +40,20 @@ export default function ProfilePage() {
     setDrafts(draftsData);
     setLeagues(leaguesData);
     setMounted(true);
+  }
+
+  async function handleSaveName() {
+    if (!user || !displayName.trim()) return;
+    setNameSaving(true);
+    const supabase = createClient();
+    await supabase
+      .from("profiles")
+      .update({ display_name: displayName.trim(), updated_at: new Date().toISOString() })
+      .eq("id", user.id);
+    setNameSaving(false);
+    setNameSaved(true);
+    setEditing(false);
+    setTimeout(() => setNameSaved(false), 2000);
   }
 
   if (loading || !mounted) {
@@ -61,7 +86,7 @@ export default function ProfilePage() {
       ? Math.max(...scoredDrafts.map((d) => d.totalScore))
       : 0;
 
-  const displayName = profile?.display_name || user.email?.split("@")[0] || "Player";
+  const name = profile?.display_name || user.email?.split("@")[0] || "Player";
 
   return (
     <div className="space-y-8">
@@ -70,27 +95,65 @@ export default function ProfilePage() {
         {profile?.avatar_url ? (
           <img
             src={profile.avatar_url}
-            alt={displayName}
+            alt={name}
             className="w-20 h-20 rounded-full border-2 border-ocean-blue/30"
           />
         ) : (
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-deep-sea to-ocean-blue flex items-center justify-center text-3xl font-black text-foreground">
-            {displayName[0].toUpperCase()}
+            {name[0].toUpperCase()}
           </div>
         )}
         <div className="text-center sm:text-left">
-          <h1 className="text-2xl sm:text-3xl font-bold">{displayName}</h1>
+          {editing ? (
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={displayName}
+                onChange={(e) => {
+                  setDisplayName(e.target.value);
+                  setNameSaved(false);
+                }}
+                placeholder="Your display name"
+                maxLength={40}
+                autoFocus
+                className="px-3 py-1.5 rounded-lg bg-surface-light border border-border text-foreground text-lg font-bold placeholder:text-text-muted focus:outline-none focus:border-ocean-blue"
+              />
+              <button
+                onClick={handleSaveName}
+                disabled={!displayName.trim() || nameSaving}
+                className="px-3 py-1.5 rounded-lg bg-ocean-blue text-background text-sm font-bold hover:bg-ocean-blue-dark transition-colors disabled:opacity-50"
+              >
+                {nameSaving ? "..." : "Save"}
+              </button>
+              <button
+                onClick={() => {
+                  setEditing(false);
+                  setDisplayName(profile?.display_name || "");
+                }}
+                className="px-3 py-1.5 rounded-lg border border-border text-text-muted text-sm font-medium hover:text-foreground hover:bg-surface-light transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-bold">{name}</h1>
+              <button
+                onClick={() => setEditing(true)}
+                className="p-1 rounded-lg text-text-muted hover:text-foreground hover:bg-surface-light transition-colors"
+                title="Edit display name"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                  <path d="m15 5 4 4" />
+                </svg>
+              </button>
+              {nameSaved && (
+                <span className="text-sm text-success font-medium">Saved!</span>
+              )}
+            </div>
+          )}
           <p className="text-text-muted text-sm mt-1">{user.email}</p>
-          <Link
-            href="/settings"
-            className="mt-3 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg border border-border text-text-muted text-xs hover:text-foreground hover:bg-surface-light transition-colors"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            Settings
-          </Link>
         </div>
       </div>
 
@@ -221,6 +284,16 @@ export default function ProfilePage() {
             })}
           </div>
         )}
+      </div>
+
+      {/* Sign Out */}
+      <div className="text-center pt-4">
+        <button
+          onClick={signOut}
+          className="text-text-muted text-sm hover:text-foreground transition-colors"
+        >
+          Sign Out
+        </button>
       </div>
     </div>
   );

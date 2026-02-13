@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import { createClient } from "@/lib/supabase/client";
@@ -19,17 +19,7 @@ const scoringRules = [
 ];
 
 export default function SettingsPage() {
-  const { user, profile, loading, signOut } = useAuth();
-
-  // Edit name
-  const [displayName, setDisplayName] = useState("");
-  const [nameSaving, setNameSaving] = useState(false);
-  const [nameSaved, setNameSaved] = useState(false);
-
-  // Sync displayName when profile loads asynchronously
-  useEffect(() => {
-    if (profile?.display_name) setDisplayName(profile.display_name);
-  }, [profile?.display_name]);
+  const { user, loading, signOut } = useAuth();
 
   // Expandable sections
   const [showHelp, setShowHelp] = useState(false);
@@ -38,19 +28,6 @@ export default function SettingsPage() {
   // Delete account
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
-
-  async function handleSaveName() {
-    if (!user || !displayName.trim()) return;
-    setNameSaving(true);
-    const supabase = createClient();
-    await supabase
-      .from("profiles")
-      .update({ display_name: displayName.trim(), updated_at: new Date().toISOString() })
-      .eq("id", user.id);
-    setNameSaving(false);
-    setNameSaved(true);
-    setTimeout(() => setNameSaved(false), 2000);
-  }
 
   async function handleDeleteAccount() {
     if (!user) return;
@@ -96,53 +73,6 @@ export default function SettingsPage() {
         <h1 className="text-2xl sm:text-3xl font-bold">Settings</h1>
         <p className="text-text-muted mt-1">Manage your account and preferences</p>
       </div>
-
-      {/* Profile Section */}
-      <section className="bg-surface rounded-xl border border-border p-4 sm:p-6">
-        <h2 className="text-lg font-bold mb-4">Profile</h2>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs sm:text-sm font-medium text-text-muted mb-1">
-              Display Name
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => {
-                  setDisplayName(e.target.value);
-                  setNameSaved(false);
-                }}
-                placeholder="Your display name"
-                maxLength={40}
-                className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-foreground text-sm placeholder:text-text-muted focus:outline-none focus:border-ocean-blue"
-              />
-              <button
-                onClick={handleSaveName}
-                disabled={!displayName.trim() || nameSaving || nameSaved}
-                className={cn(
-                  "px-4 py-2 rounded-xl font-bold text-sm transition-colors shrink-0",
-                  nameSaved
-                    ? "bg-success text-background"
-                    : displayName.trim()
-                    ? "bg-ocean-blue text-background hover:bg-ocean-blue-dark"
-                    : "bg-surface-light text-text-muted cursor-not-allowed"
-                )}
-              >
-                {nameSaved ? "Saved!" : nameSaving ? "Saving..." : "Save"}
-              </button>
-            </div>
-          </div>
-          <div>
-            <label className="block text-xs sm:text-sm font-medium text-text-muted mb-1">
-              Email
-            </label>
-            <div className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-surface-light border border-border text-text-muted text-sm">
-              {user.email}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Help & Info Section */}
       <section className="bg-surface rounded-xl border border-border overflow-hidden">
@@ -293,13 +223,6 @@ export default function SettingsPage() {
       <section className="bg-surface rounded-xl border border-border p-4 sm:p-6">
         <h2 className="text-lg font-bold mb-4">Account</h2>
         <div className="space-y-3">
-          <button
-            onClick={signOut}
-            className="w-full py-3 rounded-xl border border-border text-text-muted font-bold text-sm hover:text-foreground hover:bg-surface-light transition-colors"
-          >
-            Sign Out
-          </button>
-
           {!showDeleteConfirm ? (
             <button
               onClick={() => setShowDeleteConfirm(true)}

@@ -27,20 +27,19 @@ export default function LeagueDetailPage() {
   const leagueId = params.id as string;
 
   useEffect(() => {
+    async function loadData() {
+      const [leagueData, membersData, lbData] = await Promise.all([
+        getLeagueById(leagueId),
+        getLeagueMembers(leagueId),
+        getLeaderboard(leagueId),
+      ]);
+      setLeague(leagueData);
+      setMembers(membersData);
+      setLeaderboard(lbData);
+      setMounted(true);
+    }
     loadData();
-  }, [leagueId]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function loadData() {
-    const [leagueData, membersData, lbData] = await Promise.all([
-      getLeagueById(leagueId),
-      getLeagueMembers(leagueId),
-      getLeaderboard(leagueId),
-    ]);
-    setLeague(leagueData);
-    setMembers(membersData);
-    setLeaderboard(lbData);
-    setMounted(true);
-  }
+  }, [leagueId]);
 
   async function handleCopyInvite() {
     if (!league) return;

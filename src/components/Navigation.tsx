@@ -198,10 +198,12 @@ function HamburgerMenu({
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Close on route change
-  useEffect(() => {
+  // Close on route change (adjust state during render, not in effect)
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
 
   // Close on click outside
   useEffect(() => {

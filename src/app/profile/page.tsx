@@ -22,25 +22,26 @@ export default function ProfilePage() {
   const [nameSaving, setNameSaving] = useState(false);
   const [nameSaved, setNameSaved] = useState(false);
 
-  useEffect(() => {
-    if (profile?.display_name) setDisplayName(profile.display_name);
-  }, [profile?.display_name]);
+  // Sync displayName from profile (adjust state during render, not in effect)
+  const [lastSyncedName, setLastSyncedName] = useState<string | null>(null);
+  if (profile?.display_name && profile.display_name !== lastSyncedName) {
+    setLastSyncedName(profile.display_name);
+    setDisplayName(profile.display_name);
+  }
 
   useEffect(() => {
     if (loading || !user) return;
+    async function loadData() {
+      const [draftsData, leaguesData] = await Promise.all([
+        getDrafts(user!.id),
+        getMyLeagues(user!.id),
+      ]);
+      setDrafts(draftsData);
+      setLeagues(leaguesData);
+      setMounted(true);
+    }
     loadData();
-  }, [user, loading]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function loadData() {
-    if (!user) return;
-    const [draftsData, leaguesData] = await Promise.all([
-      getDrafts(user.id),
-      getMyLeagues(user.id),
-    ]);
-    setDrafts(draftsData);
-    setLeagues(leaguesData);
-    setMounted(true);
-  }
+  }, [user, loading]);
 
   async function handleSaveName() {
     const trimmed = displayName.trim();

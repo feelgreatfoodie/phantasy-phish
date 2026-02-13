@@ -10,7 +10,7 @@ import { getShowById } from "@/data/shows";
 import { scoreDraft } from "@/lib/scoring";
 import { updateDraft } from "@/lib/storage";
 import { SongCard } from "@/components/SongCard";
-import { formatDate, cn } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 export default function SharedDraftPage() {
   const params = useParams();

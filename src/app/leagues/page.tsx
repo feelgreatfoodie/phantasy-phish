@@ -32,17 +32,14 @@ export default function LeaguesPage() {
   const [joinError, setJoinError] = useState("");
 
   useEffect(() => {
-    if (loading) return;
-    if (!user) return;
+    if (loading || !user) return;
+    async function loadLeagues() {
+      const data = await getMyLeagues(user!.id);
+      setLeagues(data);
+      setMounted(true);
+    }
     loadLeagues();
-  }, [user, loading]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function loadLeagues() {
-    if (!user) return;
-    const data = await getMyLeagues(user.id);
-    setLeagues(data);
-    setMounted(true);
-  }
+  }, [user, loading]);
 
   async function handleCreate() {
     const trimmedName = newName.trim();

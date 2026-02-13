@@ -30,6 +30,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = createClient();
 
   useEffect(() => {
+    async function fetchProfile(userId: string) {
+      const { data } = await supabase
+        .from("profiles")
+        .select("display_name, avatar_url")
+        .eq("id", userId)
+        .single();
+      setProfile(data);
+    }
+
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
       if (user) fetchProfile(user.id);
@@ -47,15 +56,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => subscription.unsubscribe();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function fetchProfile(userId: string) {
-    const { data } = await supabase
-      .from("profiles")
-      .select("display_name, avatar_url")
-      .eq("id", userId)
-      .single();
-    setProfile(data);
-  }
 
   async function signOut() {
     await supabase.auth.signOut();
